@@ -1,0 +1,52 @@
+name: CI-CD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  release:
+    types: [published]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2019
+  
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: jurplel/install-qt-action@v2
+        with:
+          version: '5.15.2'
+          arch: 'win64_msvc2019_64'
+          target: 'desktop'
+          host: 'windows'
+          dir: 'C:\'
+        
+      - run: |
+          cd Installer 
+          .\build_installer.bat
+        
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Setup
+          path: Installer/Power.Attendance.Setup.exe
+          if-no-files-found: error
+          
+  deploy:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-20.04
+    
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: Setup
+
+      - uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: Power.Attendance.Setup.exe
+          tag: ${{ github.ref }}

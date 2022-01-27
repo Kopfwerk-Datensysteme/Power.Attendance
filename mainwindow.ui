@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>994</width>
+    <height>499</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Power.Attendance - System für Anwesenheitskontrolle</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>994</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="defaultUp">
+    <bool>true</bool>
+   </property>
+   <widget class="QMenu" name="menuUser">
+    <property name="title">
+     <string>Benutzer</string>
+    </property>
+    <addaction name="actionModify"/>
+   </widget>
+   <widget class="QMenu" name="menuAttendance">
+    <property name="title">
+     <string>Anwesenheit</string>
+    </property>
+    <addaction name="actionCheck"/>
+   </widget>
+   <addaction name="menuUser"/>
+   <addaction name="menuAttendance"/>
+  </widget>
+  <action name="actionBeenden">
+   <property name="text">
+    <string>Beenden</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionAusgabe">
+   <property name="text">
+    <string>Ausgabe</string>
+   </property>
+   <property name="shortcut">
+    <string>A</string>
+   </property>
+  </action>
+  <action name="actionRueckgabe">
+   <property name="text">
+    <string>Rückgabe</string>
+   </property>
+   <property name="shortcut">
+    <string>R</string>
+   </property>
+  </action>
+  <action name="actionKartenzuordnung">
+   <property name="text">
+    <string>Kartenzuordnung</string>
+   </property>
+   <property name="shortcut">
+    <string>K</string>
+   </property>
+  </action>
+  <action name="actionInfo_ueber_Power_SFU_WS">
+   <property name="text">
+    <string>Info über Power.Attendance</string>
+   </property>
+  </action>
+  <action name="actionAbfrageStudienkarte">
+   <property name="text">
+    <string>Abfrage Studentenkarte</string>
+   </property>
+   <property name="toolTip">
+    <string>Abfrage Studentenkarte</string>
+   </property>
+   <property name="shortcut">
+    <string>S</string>
+   </property>
+  </action>
+  <action name="actionAbfrageWinkelstueck">
+   <property name="text">
+    <string>Abfrage Winkelstück</string>
+   </property>
+   <property name="shortcut">
+    <string>W</string>
+   </property>
+  </action>
+  <action name="actionAbfrageAusgaben">
+   <property name="text">
+    <string>Abfrage Ausgaben</string>
+   </property>
+   <property name="shortcut">
+    <string>B</string>
+   </property>
+  </action>
+  <action name="actionModus_Winkelstuecke">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Modus Winkelstücke</string>
+   </property>
+  </action>
+  <action name="actionModus_Waesche">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Modus Wäsche</string>
+   </property>
+  </action>
+  <action name="actionEinstellung_Waesche">
+   <property name="text">
+    <string>Einstellung Wäsche</string>
+   </property>
+  </action>
+  <action name="actionModify">
+   <property name="text">
+    <string>Ändern ...</string>
+   </property>
+  </action>
+  <action name="actionCheck">
+   <property name="text">
+    <string>Kontrollieren ...</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
