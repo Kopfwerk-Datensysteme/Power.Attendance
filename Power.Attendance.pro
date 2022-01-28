@@ -13,16 +13,25 @@ SOURCES += \
 		database.cpp \
 		fingerprintreader.cpp \
 		main.cpp \
-		mainwindow.cpp
+		mainwindow.cpp \
+		timestampdialog.cpp \
+		userdialog.cpp \
+		usermodifydialog.cpp
 
 HEADERS += \
                 common.h \
                 database.h \
 		fingerprintreader.h \
-		mainwindow.h
+		mainwindow.h \
+    timestampdialog.h \
+    userdialog.h \
+    usermodifydialog.h
 
 FORMS += \
-		mainwindow.ui
+		mainwindow.ui \
+		timestampdialog.ui \
+		userdialog.ui \
+		usermodifydialog.ui
 
 LIBS += \
                 -lwinbio

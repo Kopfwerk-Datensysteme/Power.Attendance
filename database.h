@@ -29,4 +29,4 @@ QList<User> GetAllUsers();
 
 void AddTimestampForUser(QString biometricId);
 
-QList<Timestamp> GetAllTimestampsForDate(QDate date);
+QList<Timestamp> GetAllTimestampsForDateUserNameMatriculationNumber(QDate date, QString userName, QString matriculationNumber);

@@ -90,15 +90,17 @@ void AddTimestampForUser(QString biometricId) {
     EventuallyHandleDatabaseError(success, query);
 }
 
-QList<Timestamp> GetAllTimestampsForDate(QDate date) {
+QList<Timestamp> GetAllTimestampsForDateUserNameMatriculationNumber(QDate date, QString userName, QString matriculationNumber) {
     qint64 startOfDayTimestampValue = date.startOfDay().toSecsSinceEpoch();
     qint64 endOfDayTimestampValue = date.endOfDay().toSecsSinceEpoch();
     QSqlQuery query;
     bool success;
-    success = query.prepare("SELECT * FROM Timestamps WHERE ? <= timestampValue AND timestampValue <= ?;");
+    success = query.prepare("SELECT * FROM Timestamps INNER JOIN Users ON Timestamps.biometricId = Users.biometricId WHERE ? <= timestampValue AND timestampValue <= ? AND userName LIKE ('%' || ? || '%') AND matriculationNumber LIKE ('%' || ? || '%');");
     EventuallyHandleDatabaseError(success, query);
     query.addBindValue(startOfDayTimestampValue);
     query.addBindValue(endOfDayTimestampValue);
+    query.addBindValue(userName);
+    query.addBindValue(matriculationNumber);
     success = query.exec();
     EventuallyHandleDatabaseError(success, query);
     QList<Timestamp> timestampList;

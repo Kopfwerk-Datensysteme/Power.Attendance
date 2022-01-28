@@ -1,0 +1,70 @@
+#include "userdialog.h"
+#include "ui_userdialog.h"
+#include "usermodifydialog.h"
+#include "database.h"
+
+UserDialog::UserDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::UserDialog)
+{
+    ui->setupUi(this);
+    // connect slots
+    connect(ui->userModifyButton, &QPushButton::pressed, this, &UserDialog::OnModifyUser);
+    connect(ui->userDeleteButton, &QPushButton::pressed, this, &UserDialog::OnDeleteUser);
+    // set up user table
+    ui->userTable->setModel(&userData);
+    ui->userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->userTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->userTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->userTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    UpdateUserTable();
+}
+
+UserDialog::~UserDialog()
+{
+    delete ui;
+}
+
+void UserDialog::UpdateUserTable() {
+    auto userList = GetAllUsers();
+    userData.clear();
+    userData.setHorizontalHeaderItem(0, new QStandardItem(QString("ID")));
+    userData.setHorizontalHeaderItem(1, new QStandardItem(QString("Matrikelnummer")));
+    userData.setHorizontalHeaderItem(2, new QStandardItem(QString("Name")));
+    for (int row = 0; row < userList.size(); row++) {
+        QList<QStandardItem*> itemList;
+        itemList << new QStandardItem(userList[row].biometricId) << new QStandardItem(userList[row].matriculationNumber) << new QStandardItem(userList[row].userName);
+        userData.appendRow(itemList);
+    }
+    ui->userTable->selectRow(0);
+    ui->userTable->setFocus();
+    ui->userModifyButton->setEnabled(0 < userList.size());
+    ui->userDeleteButton->setEnabled(0 < userList.size());
+}
+
+void UserDialog::OnDeleteUser() {
+    qint64 selectedRow = ui->userTable->selectionModel()->selectedRows()[0].row();
+    QString biometricId = userData.item(selectedRow)->text();
+    try {
+        DeleteUser(biometricId);
+    } catch (QException e) {
+        ShowMessage("Der Benutzer konnte nicht gelöscht werden!");
+    }
+    UpdateUserTable();
+}
+
+void UserDialog::OnModifyUser() {
+    qint64 selectedRow = ui->userTable->selectionModel()->selectedRows()[0].row();
+    QString biometricId = userData.item(selectedRow, 0)->text();
+    QString matriculationNumber = userData.item(selectedRow, 1)->text();
+    QString userName = userData.item(selectedRow, 2)->text();
+    UserModifyDialog dlg({biometricId, matriculationNumber, userName});
+    if (dlg.exec() == QDialog::Accepted) {
+        try {
+            ModifyUser(dlg.user);
+        } catch (QException e) {
+            ShowMessage("Der Benutzer konnte nicht geändert werden!");
+        }
+    }
+    UpdateUserTable();
+}

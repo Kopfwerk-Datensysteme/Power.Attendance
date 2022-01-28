@@ -17,13 +17,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    FingerprintReader reader;
 
 private slots:
 
     // user menu
-    void on_actionModify_triggered();
+    void OnModify();
 
     // attendance menu
-    void on_actionCheck_triggered();
+    void OnCheck();
 };

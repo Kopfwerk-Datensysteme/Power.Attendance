@@ -1,13 +1,9 @@
 #include "fingerprintreader.h"
 
-FingerprintReader::FingerprintReader() {}
-
-FingerprintReader::~FingerprintReader() {}
-
-std::string FingerprintReader::GetFingerprintSample()
+QString GetFingerprintSample()
 {
     // define important variables
-    std::string id = "";
+    QString id = "";
     HRESULT resultHandle = 0;
     WINBIO_SESSION_HANDLE sessionHandle = 0;
     WINBIO_BIR* sample = nullptr;
@@ -41,7 +37,7 @@ std::string FingerprintReader::GetFingerprintSample()
         &rejectDetail
     );
     if (resultHandle == S_OK && sample != nullptr) {
-        id = std::string((char*)(sample + sample->StandardDataBlock.Offset), sample->StandardDataBlock.Size);
+        id = QString::fromStdString(std::string((char*)(sample + sample->StandardDataBlock.Offset), sample->StandardDataBlock.Size));
     } else {
         if (resultHandle == WINBIO_E_INVALID_DEVICE_STATE) {
             id = "WINBIO_E_INVALID_DEVICE_STATE";
@@ -51,7 +47,7 @@ std::string FingerprintReader::GetFingerprintSample()
     return id;
 }
 
-void FingerprintReader::FreeBioPointers(WINBIO_SESSION_HANDLE sessionHandle, WINBIO_BIR* sample) {
+void FreeBioPointers(WINBIO_SESSION_HANDLE sessionHandle, WINBIO_BIR* sample) {
     WinBioFree(sample);
     WinBioCloseSession(sessionHandle);
 }
