@@ -105,7 +105,7 @@ QList<Timestamp> GetAllTimestampsForDateUserNameMatriculationNumber(QDate date, 
     EventuallyHandleDatabaseError(success, query);
     QList<Timestamp> timestampList;
     while (query.next()) {
-        Timestamp currentTimestamp = {query.value(0).toString(), query.value(1).toString().toLongLong()};
+        Timestamp currentTimestamp = {query.value(0).toString(), query.value(3).toString(), query.value(4).toString(), query.value(1).toLongLong()};
         timestampList.append(currentTimestamp);
     }
     return timestampList;

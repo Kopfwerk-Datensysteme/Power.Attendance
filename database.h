@@ -10,6 +10,8 @@ struct User {
 
 struct Timestamp {
     QString biometricId;
+    QString matriculationNumber;
+    QString userName;
     qint64 timestampValue;
 };
 
