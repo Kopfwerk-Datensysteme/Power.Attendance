@@ -15,7 +15,7 @@ TimestampDialog::TimestampDialog(QWidget *parent) :
     ui->dateEdit->setDate(QDate::currentDate());
     // set up user table
     ui->attendanceTable->setModel(&attendanceData);
-    ui->attendanceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->attendanceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     ui->attendanceTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->attendanceTable->setSelectionMode(QAbstractItemView::NoSelection);
     ui->attendanceTable->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -46,7 +46,7 @@ void TimestampDialog::UpdateAttendanceTable() {
         QList<qint64> timestampValues = attendanceList[row].timestampValues;
         int index;
         for (index = 0; index < timestampValues.size() - 1; index += 2) {
-            attendanceStringList.append(QDateTime::fromSecsSinceEpoch(timestampValues[index]).time().toString() + "-" + QDateTime::fromSecsSinceEpoch(timestampValues[index]).time().toString());
+            attendanceStringList.append(QDateTime::fromSecsSinceEpoch(timestampValues[index]).time().toString() + "-" + QDateTime::fromSecsSinceEpoch(timestampValues[index + 1]).time().toString());
         }
         if (index < timestampValues.size()) {
             attendanceStringList.append(QDateTime::fromSecsSinceEpoch(timestampValues[index]).time().toString());
@@ -54,4 +54,5 @@ void TimestampDialog::UpdateAttendanceTable() {
         itemList.append(new QStandardItem(attendanceStringList.join(",")));
         attendanceData.appendRow(itemList);
     }
+    ui->attendanceTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 }

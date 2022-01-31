@@ -15,7 +15,7 @@ UserDialog::UserDialog(QWidget *parent) :
     connect(ui->lineEditMatriculationNumber, &QLineEdit::textChanged, this, &UserDialog::UpdateUserTable);
     // set up user table
     ui->userTable->setModel(&userData);
-    ui->userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     ui->userTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->userTable->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->userTable->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -43,6 +43,7 @@ void UserDialog::UpdateUserTable() {
     ui->userTable->selectRow(0);
     ui->userModifyButton->setEnabled(0 < userList.size());
     ui->userDeleteButton->setEnabled(0 < userList.size());
+    ui->userTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 }
 
 void UserDialog::OnDeleteUser() {
