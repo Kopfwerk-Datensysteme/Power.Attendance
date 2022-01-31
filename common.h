@@ -5,6 +5,7 @@
 #include "conio.h"
 #include "windows.h"
 #include "memory.h"
+#include "tuple"
 #include <QMessageBox>
 #include <QApplication>
 #include <QSqlDatabase>
@@ -19,5 +20,6 @@
 #include <QStandardItemModel>
 #include <QPushButton>
 #include <QDialog>
+#include <QSet>
 
 void ShowMessage(QString message);

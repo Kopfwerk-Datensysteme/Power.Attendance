@@ -33,7 +33,9 @@ void UserDialog::UpdateUserTable() {
     userData.setHorizontalHeaderItem(2, new QStandardItem(QString("Name")));
     for (int row = 0; row < userList.size(); row++) {
         QList<QStandardItem*> itemList;
-        itemList << new QStandardItem(userList[row].biometricId) << new QStandardItem(userList[row].matriculationNumber) << new QStandardItem(userList[row].userName);
+        itemList.append(new QStandardItem(userList[row].biometricId));
+        itemList.append(new QStandardItem(userList[row].matriculationNumber));
+        itemList.append(new QStandardItem(userList[row].userName));
         userData.appendRow(itemList);
     }
     ui->userTable->selectRow(0);
