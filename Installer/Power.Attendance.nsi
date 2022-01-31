@@ -5,6 +5,7 @@
 # adds uninstall information to the registry for Add/Remove Programs
   
 !include "MUI.nsh"
+!include "MUI2.nsh"
 !include LogicLib.nsh
 Unicode true
 
@@ -43,6 +44,7 @@ RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on
 InstallDir "$PROGRAMFILES64\${APPNAME}"
 
 # This will be in the installer/uninstaller's title bar
+!define MUI_ICON logo.ico
 Name "${APPNAME}"
 Icon "logo.ico"
 outFile "${APPNAME}.Setup.exe"
