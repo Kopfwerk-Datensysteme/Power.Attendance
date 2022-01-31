@@ -28,7 +28,12 @@ UserDialog::~UserDialog()
 }
 
 void UserDialog::UpdateUserTable() {
-    auto userList = GetUsers(ui->lineEditUserName->text(), ui->lineEditMatriculationNumber->text());
+    QList<User> userList;
+    try {
+        userList = GetUsers(ui->lineEditUserName->text(), ui->lineEditMatriculationNumber->text());
+    } catch (QException e) {
+        ShowMessage("Die Benutzer konnten nicht von der Datenbank geladen werden!");
+    }
     userData.clear();
     userData.setHorizontalHeaderItem(0, new QStandardItem(QString("ID")));
     userData.setHorizontalHeaderItem(1, new QStandardItem(QString("Matrikelnummer")));

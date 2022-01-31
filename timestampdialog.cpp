@@ -28,10 +28,15 @@ TimestampDialog::~TimestampDialog()
 }
 
 void TimestampDialog::UpdateAttendanceTable() {
-    auto attendanceList = GetAttendance(
+    QList<Attendance> attendanceList;
+    try {
+        attendanceList = GetAttendance(
                 ui->dateEdit->date(),
                 ui->lineEditUserName->text(),
                 ui->lineEditMatriculationNumber->text());
+    } catch (QException e) {
+        ShowMessage("Die Zeitstempel konnten nicht von der Datenbank geladen werden!");
+    }
     attendanceData.clear();
     attendanceData.setHorizontalHeaderItem(0, new QStandardItem(QString("ID")));
     attendanceData.setHorizontalHeaderItem(1, new QStandardItem(QString("Matrikelnummer")));

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>img/icon.png</file>
+        <file>img/fingerprint.svg</file>
     </qresource>
 </RCC>
