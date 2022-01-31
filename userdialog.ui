@@ -7,100 +7,84 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>480</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Benutzer-Dialog</string>
   </property>
-  <widget class="QTableView" name="userTable">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>70</y>
-     <width>781</width>
-     <height>371</height>
-    </rect>
-   </property>
-   <property name="alternatingRowColors">
-    <bool>true</bool>
-   </property>
-   <property name="sortingEnabled">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="userModifyButton">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>450</y>
-     <width>141</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Benutzer ändern</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="userDeleteButton">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>450</y>
-     <width>141</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Benutzer löschen</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEditMatriculationNumber">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>30</y>
-     <width>201</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEditUserName">
-   <property name="geometry">
-    <rect>
-     <x>590</x>
-     <y>30</y>
-     <width>201</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelMatriculationNumber">
-   <property name="geometry">
-    <rect>
-     <x>70</x>
-     <y>10</y>
-     <width>111</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Matrikelnummer</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelUserName">
-   <property name="geometry">
-    <rect>
-     <x>680</x>
-     <y>10</y>
-     <width>111</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Name</string>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLabel" name="labelMatriculationNumber">
+           <property name="text">
+            <string>Matrikelnummer</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditMatriculationNumber"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="labelUserName">
+           <property name="text">
+            <string>Name</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditUserName"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QTableView" name="userTable">
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="userModifyButton">
+         <property name="text">
+          <string>Benutzer ändern</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="userDeleteButton">
+         <property name="text">
+          <string>Benutzer löschen</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
