@@ -1,4 +1,4 @@
-QT += core gui sql network printsupport widgets
+QT += core gui sql network printsupport widgets svg
 
 TARGET = Power.Attendance
 
