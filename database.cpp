@@ -65,10 +65,14 @@ void DeleteUser(QString biometricId) {
     EventuallyHandleDatabaseError(success, query);
 }
 
-QList<User> GetAllUsers() {
+QList<User> GetUsers(QString userName, QString matriculationNumber) {
     QSqlQuery query;
     bool success;
-    success = query.exec("SELECT * FROM Users;");
+    success = query.prepare("SELECT * FROM Users WHERE userName LIKE ('%' || ? || '%') AND matriculationNumber LIKE ('%' || ? || '%');");
+    EventuallyHandleDatabaseError(success, query);
+    query.addBindValue(userName);
+    query.addBindValue(matriculationNumber);
+    success = query.exec();
     EventuallyHandleDatabaseError(success, query);
     QList<User> userList;
     while (query.next()) {
@@ -90,12 +94,12 @@ void AddTimestampForUser(QString biometricId) {
     EventuallyHandleDatabaseError(success, query);
 }
 
-QList<Timestamp> GetAllTimestampsForDateUserNameMatriculationNumber(QDate date, QString userName, QString matriculationNumber) {
+QList<Attendance> GetAttendance(QDate date, QString userName, QString matriculationNumber) {
     qint64 startOfDayTimestampValue = date.startOfDay().toSecsSinceEpoch();
     qint64 endOfDayTimestampValue = date.endOfDay().toSecsSinceEpoch();
     QSqlQuery query;
     bool success;
-    success = query.prepare("SELECT * FROM Timestamps INNER JOIN Users ON Timestamps.biometricId = Users.biometricId WHERE ? <= timestampValue AND timestampValue <= ? AND userName LIKE ('%' || ? || '%') AND matriculationNumber LIKE ('%' || ? || '%');");
+    success = query.prepare("SELECT *, GROUP_CONCAT(timestampValue) FROM Timestamps INNER JOIN Users ON Timestamps.biometricId = Users.biometricId WHERE ? <= timestampValue AND timestampValue <= ? AND userName LIKE ('%' || ? || '%') AND matriculationNumber LIKE ('%' || ? || '%') GROUP BY Users.biometricId;");
     EventuallyHandleDatabaseError(success, query);
     query.addBindValue(startOfDayTimestampValue);
     query.addBindValue(endOfDayTimestampValue);
@@ -103,10 +107,14 @@ QList<Timestamp> GetAllTimestampsForDateUserNameMatriculationNumber(QDate date, 
     query.addBindValue(matriculationNumber);
     success = query.exec();
     EventuallyHandleDatabaseError(success, query);
-    QList<Timestamp> timestampList;
+    QList<Attendance> attendanceList;
     while (query.next()) {
-        Timestamp currentTimestamp = {query.value(0).toString(), query.value(3).toString(), query.value(4).toString(), query.value(1).toLongLong()};
-        timestampList.append(currentTimestamp);
+        QList<qint64> timestampList;
+        for (QString& timestampString : query.value(5).toString().split(",")) {
+            timestampList.append(timestampString.toLongLong());
+        }
+        Attendance currentAttendance = {query.value(0).toString(), query.value(3).toString(), query.value(4).toString(), timestampList};
+        attendanceList.append(currentAttendance);
     }
-    return timestampList;
+    return attendanceList;
 }

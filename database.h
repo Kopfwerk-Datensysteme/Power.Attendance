@@ -8,11 +8,11 @@ struct User {
     QString userName;
 };
 
-struct Timestamp {
+struct Attendance {
     QString biometricId;
     QString matriculationNumber;
     QString userName;
-    qint64 timestampValue;
+    QList<qint64> timestampValues;
 };
 
 void EventuallyHandleDatabaseError(bool success, QSqlQuery query);
@@ -27,8 +27,8 @@ void ModifyUser(User user);
 
 void DeleteUser(QString biometricId);
 
-QList<User> GetAllUsers();
+QList<User> GetUsers(QString userName, QString matriculationNumber);
 
 void AddTimestampForUser(QString biometricId);
 
-QList<Timestamp> GetAllTimestampsForDateUserNameMatriculationNumber(QDate date, QString userName, QString matriculationNumber);
+QList<Attendance> GetAttendance(QDate date, QString userName, QString matriculationNumber);

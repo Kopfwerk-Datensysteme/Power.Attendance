@@ -11,6 +11,8 @@ UserDialog::UserDialog(QWidget *parent) :
     // connect slots
     connect(ui->userModifyButton, &QPushButton::pressed, this, &UserDialog::OnModifyUser);
     connect(ui->userDeleteButton, &QPushButton::pressed, this, &UserDialog::OnDeleteUser);
+    connect(ui->lineEditUserName, &QLineEdit::textChanged, this, &UserDialog::UpdateUserTable);
+    connect(ui->lineEditMatriculationNumber, &QLineEdit::textChanged, this, &UserDialog::UpdateUserTable);
     // set up user table
     ui->userTable->setModel(&userData);
     ui->userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -26,7 +28,7 @@ UserDialog::~UserDialog()
 }
 
 void UserDialog::UpdateUserTable() {
-    auto userList = GetAllUsers();
+    auto userList = GetUsers(ui->lineEditUserName->text(), ui->lineEditMatriculationNumber->text());
     userData.clear();
     userData.setHorizontalHeaderItem(0, new QStandardItem(QString("ID")));
     userData.setHorizontalHeaderItem(1, new QStandardItem(QString("Matrikelnummer")));
@@ -39,7 +41,6 @@ void UserDialog::UpdateUserTable() {
         userData.appendRow(itemList);
     }
     ui->userTable->selectRow(0);
-    ui->userTable->setFocus();
     ui->userModifyButton->setEnabled(0 < userList.size());
     ui->userDeleteButton->setEnabled(0 < userList.size());
 }

@@ -28,7 +28,7 @@ TimestampDialog::~TimestampDialog()
 }
 
 void TimestampDialog::UpdateAttendanceTable() {
-    auto timestampList = GetAllTimestampsForDateUserNameMatriculationNumber(
+    auto attendanceList = GetAttendance(
                 ui->dateEdit->date(),
                 ui->lineEditUserName->text(),
                 ui->lineEditMatriculationNumber->text());
@@ -37,12 +37,21 @@ void TimestampDialog::UpdateAttendanceTable() {
     attendanceData.setHorizontalHeaderItem(1, new QStandardItem(QString("Matrikelnummer")));
     attendanceData.setHorizontalHeaderItem(2, new QStandardItem(QString("Name")));
     attendanceData.setHorizontalHeaderItem(3, new QStandardItem(QString("Anwesenheit")));
-    for (int row = 0; row < timestampList.size(); row++) {
+    for (int row = 0; row < attendanceList.size(); row++) {
         QList<QStandardItem*> itemList;
-        itemList.append(new QStandardItem(timestampList[row].biometricId));
-        itemList.append(new QStandardItem(timestampList[row].matriculationNumber));
-        itemList.append(new QStandardItem(timestampList[row].userName));
-        itemList.append(new QStandardItem(QString::number(timestampList[row].timestampValue)));
+        itemList.append(new QStandardItem(attendanceList[row].biometricId));
+        itemList.append(new QStandardItem(attendanceList[row].matriculationNumber));
+        itemList.append(new QStandardItem(attendanceList[row].userName));
+        QStringList attendanceStringList;
+        QList<qint64> timestampValues = attendanceList[row].timestampValues;
+        int index;
+        for (index = 0; index < timestampValues.size() - 1; index += 2) {
+            attendanceStringList.append(QDateTime::fromSecsSinceEpoch(timestampValues[index]).time().toString() + "-" + QDateTime::fromSecsSinceEpoch(timestampValues[index]).time().toString());
+        }
+        if (index < timestampValues.size()) {
+            attendanceStringList.append(QDateTime::fromSecsSinceEpoch(timestampValues[index]).time().toString());
+        }
+        itemList.append(new QStandardItem(attendanceStringList.join(",")));
         attendanceData.appendRow(itemList);
     }
 }
