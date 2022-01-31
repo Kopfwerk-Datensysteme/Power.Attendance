@@ -32,27 +32,19 @@
          </item>
          <item>
           <widget class="QDateEdit" name="dateEdit">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="displayFormat">
             <string>dd.MM.yyyy</string>
            </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <item>
-          <widget class="QLabel" name="labelUserName">
-           <property name="text">
-            <string>Name</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
+           <property name="calendarPopup">
+            <bool>true</bool>
            </property>
           </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEditUserName"/>
          </item>
         </layout>
        </item>
@@ -70,6 +62,23 @@
          </item>
          <item>
           <widget class="QLineEdit" name="lineEditMatriculationNumber"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="labelUserName">
+           <property name="text">
+            <string>Name</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditUserName"/>
          </item>
         </layout>
        </item>
