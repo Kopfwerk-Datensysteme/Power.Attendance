@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setOrganizationName("KOPFWERK");
     app.setApplicationName ("Power.Attendance");
+    app.setWindowIcon(QIcon(":/img/icon.png"));
     // show main window
     MainWindow w;
     w.show();
