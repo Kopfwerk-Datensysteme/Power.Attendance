@@ -8,8 +8,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // connect slots
     connect(ui->actionModify, &QAction::triggered, this, &MainWindow::OnModify);
     connect(ui->actionCheck, &QAction::triggered, this, &MainWindow::OnCheck);
+    // setup graphics view
 }
 
 MainWindow::~MainWindow()

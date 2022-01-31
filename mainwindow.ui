@@ -26,11 +26,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <widget class="QGraphicsView" name="graphicsViewFingerprint"/>
-    </item>
-   </layout>
+   <layout class="QHBoxLayout" name="horizontalLayout_2"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -62,91 +58,6 @@
    <addaction name="menuUser"/>
    <addaction name="menuAttendance"/>
   </widget>
-  <action name="actionBeenden">
-   <property name="text">
-    <string>Beenden</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Q</string>
-   </property>
-  </action>
-  <action name="actionAusgabe">
-   <property name="text">
-    <string>Ausgabe</string>
-   </property>
-   <property name="shortcut">
-    <string>A</string>
-   </property>
-  </action>
-  <action name="actionRueckgabe">
-   <property name="text">
-    <string>Rückgabe</string>
-   </property>
-   <property name="shortcut">
-    <string>R</string>
-   </property>
-  </action>
-  <action name="actionKartenzuordnung">
-   <property name="text">
-    <string>Kartenzuordnung</string>
-   </property>
-   <property name="shortcut">
-    <string>K</string>
-   </property>
-  </action>
-  <action name="actionInfo_ueber_Power_SFU_WS">
-   <property name="text">
-    <string>Info über Power.Attendance</string>
-   </property>
-  </action>
-  <action name="actionAbfrageStudienkarte">
-   <property name="text">
-    <string>Abfrage Studentenkarte</string>
-   </property>
-   <property name="toolTip">
-    <string>Abfrage Studentenkarte</string>
-   </property>
-   <property name="shortcut">
-    <string>S</string>
-   </property>
-  </action>
-  <action name="actionAbfrageWinkelstueck">
-   <property name="text">
-    <string>Abfrage Winkelstück</string>
-   </property>
-   <property name="shortcut">
-    <string>W</string>
-   </property>
-  </action>
-  <action name="actionAbfrageAusgaben">
-   <property name="text">
-    <string>Abfrage Ausgaben</string>
-   </property>
-   <property name="shortcut">
-    <string>B</string>
-   </property>
-  </action>
-  <action name="actionModus_Winkelstuecke">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Modus Winkelstücke</string>
-   </property>
-  </action>
-  <action name="actionModus_Waesche">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Modus Wäsche</string>
-   </property>
-  </action>
-  <action name="actionEinstellung_Waesche">
-   <property name="text">
-    <string>Einstellung Wäsche</string>
-   </property>
-  </action>
   <action name="actionModify">
    <property name="text">
     <string>Ändern ...</string>
