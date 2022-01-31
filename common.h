@@ -22,5 +22,6 @@
 #include <QDialog>
 #include <QSet>
 #include <QStandardPaths>
+#include <QPicture>
 
 void ShowMessage(QString message);

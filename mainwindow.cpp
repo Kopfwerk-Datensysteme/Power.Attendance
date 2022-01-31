@@ -11,7 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // connect slots
     connect(ui->actionModify, &QAction::triggered, this, &MainWindow::OnModify);
     connect(ui->actionCheck, &QAction::triggered, this, &MainWindow::OnCheck);
-    // setup graphics view
+    // setup fingerprint icon
+    QIcon fingerprintImage(":/img/fingerprint.svg");
+    ui->labelFingerprintImage->setPixmap(fingerprintImage.pixmap(300));
 }
 
 MainWindow::~MainWindow()
