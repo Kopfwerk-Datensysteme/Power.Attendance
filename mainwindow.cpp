@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionCheck, &QAction::triggered, this, &MainWindow::OnCheck);
     // setup fingerprint icon
     QIcon fingerprintImage(":/img/fingerprint.svg");
-    ui->labelFingerprintImage->setPixmap(fingerprintImage.pixmap(300));
+    ui->labelFingerprintImage->setPixmap(fingerprintImage.pixmap(200));
 }
 
 MainWindow::~MainWindow()
