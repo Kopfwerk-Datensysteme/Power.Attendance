@@ -21,5 +21,6 @@
 #include <QPushButton>
 #include <QDialog>
 #include <QSet>
+#include <QStandardPaths>
 
 void ShowMessage(QString message);

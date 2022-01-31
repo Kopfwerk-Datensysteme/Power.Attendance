@@ -16,7 +16,9 @@ int main(int argc, char *argv[])
     w.show();
     // open and set up database
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    QString databasePath = QCoreApplication::applicationDirPath() + QDir::separator() + "database.db";
+    QString databaseFolder = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(databaseFolder);
+    QString databasePath = databaseFolder + QDir::separator() + "database.sqlite";
     db.setDatabaseName(databasePath);
     if (!db.open()) {
         ShowMessage("Die Datenbank konnte nicht geöffnet werden!");
