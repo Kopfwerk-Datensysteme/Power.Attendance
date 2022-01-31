@@ -75,117 +75,121 @@ ${EndIf}
 # Installer
 
 function .onInit
-	setShellVarContext all
-	!insertmacro VerifyUserIsAdmin
+    setShellVarContext all
+    !insertmacro VerifyUserIsAdmin
 functionEnd
 
 section "install"
-	# Files for the install directory - to build the installer, these should be 
-	# in the same directory as the install script (this file)
-	setOutPath $INSTDIR
-	
-	# alte Version von InstallMate entfernen
-	SetRegView 64
-	DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{BDABFABD-79B3-4354-8330-DB5A0B7C360E}"
-	
-	# install Visual C++ Redistributable
-	File "deploy_files\vc_redist.x64.exe" 	
-	ClearErrors
-	ExecWait '"$INSTDIR\vc_redist.x64.exe" /passive /norestart'	
-	SetRegView default
+    # Files for the install directory - to build the installer, these should be 
+    # in the same directory as the install script (this file)
+    setOutPath $INSTDIR
+    
+    # alte Version von InstallMate entfernen
+    SetRegView 64
+    DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{BDABFABD-79B3-4354-8330-DB5A0B7C360E}"
+    
+    # install Visual C++ Redistributable
+    File "deploy_files\vc_redist.x64.exe" 	
+    ClearErrors
+    ExecWait '"$INSTDIR\vc_redist.x64.exe" /passive /norestart'	
+    SetRegView default
 
-	# Files added here should be removed by the uninstaller (see section "uninstall")
-	File /r "deploy_files\iconengines"
-	File /r "deploy_files\imageformats"
-	File /r "deploy_files\platforms"
-	File /r "deploy_files\styles"
-	File /r "deploy_files\translations"
- 	File "deploy_files\D3Dcompiler_47.dll"
- 	File "deploy_files\fernwartung.exe"
- 	File "deploy_files\libEGL.dll"
- 	File "deploy_files\libGLESV2.dll"
- 	File "deploy_files\opengl32sw.dll"
+    # Files added here should be removed by the uninstaller (see section "uninstall")
+    File /r "deploy_files\iconengines"
+    File /r "deploy_files\imageformats"
+    File /r "deploy_files\platforms"
+    File /r "deploy_files\sqldrivers"
+    File /r "deploy_files\styles"
+    File /r "deploy_files\translations"
+    File "deploy_files\d3dcompiler_47.dll"
+    File "deploy_files\fernwartung.exe"
+    File "deploy_files\libEGL.dll"
+    File "deploy_files\libGLESv2.dll"
+    File "deploy_files\opengl32sw.dll"
     File "deploy_files\${APPNAME}.exe"
- 	File "deploy_files\Qt5Core.dll"
- 	File "deploy_files\Qt5Gui.dll"
- 	File "deploy_files\Qt5Svg.dll"
- 	File "deploy_files\Qt5Widgets.dll"
-	File "logo.ico"
+    File "deploy_files\Qt5Core.dll"
+    File "deploy_files\Qt5Gui.dll"
+    File "deploy_files\Qt5Sql.dll"
+    File "deploy_files\Qt5Svg.dll"
+    File "deploy_files\Qt5Widgets.dll"
+    File "logo.ico"
 
-	# Uninstaller - See function un.onInit and section "uninstall" for configuration
-	writeUninstaller "$INSTDIR\uninstall.exe"
+    # Uninstaller - See function un.onInit and section "uninstall" for configuration
+    writeUninstaller "$INSTDIR\uninstall.exe"
  
-	# Start Menu
-	createDirectory "$SMPROGRAMS\${COMPANYNAME}"
+    # Start Menu
+    createDirectory "$SMPROGRAMS\${COMPANYNAME}"
         createShortCut "$SMPROGRAMS\${COMPANYNAME}\${APPNAME}.lnk" "$INSTDIR\${APPNAME}.exe" "" "$INSTDIR\logo.ico"
-	createShortCut "$SMPROGRAMS\${COMPANYNAME}\Fernwartung.lnk" "$INSTDIR\fernwartung.exe" "" "$INSTDIR\fernwartung.exe"
+    createShortCut "$SMPROGRAMS\${COMPANYNAME}\Fernwartung.lnk" "$INSTDIR\fernwartung.exe" "" "$INSTDIR\fernwartung.exe"
  
-	# Registry information for add/remove programs
-	# liegt bei mir unter: HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\KOPFWERK PowerSteri
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "DisplayName" "${APPNAME} - ${DESCRIPTION}"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "InstallLocation" "$\"$INSTDIR$\""
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "DisplayIcon" "$\"$INSTDIR\logo.ico$\""
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "Publisher" "$\"${COMPANYNAME}$\""
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "HelpLink" "$\"${HELPURL}$\""
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "URLUpdateInfo" "$\"${UPDATEURL}$\""
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "URLInfoAbout" "$\"${ABOUTURL}$\""
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "DisplayVersion" "$\"${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}$\""
-	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "VersionMajor" ${VERSIONMAJOR}
-	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "VersionMinor" ${VERSIONMINOR}
-	# There is no option for modifying or repairing the install
-	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "NoModify" 1
-	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "NoRepair" 1
-	# Set the INSTALLSIZE constant (!defined at the top of this script) so Add/Remove Programs can accurately report the size
-	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "EstimatedSize" ${INSTALLSIZE}
+    # Registry information for add/remove programs
+    # liegt bei mir unter: HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\KOPFWERK PowerSteri
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "DisplayName" "${APPNAME} - ${DESCRIPTION}"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "InstallLocation" "$\"$INSTDIR$\""
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "DisplayIcon" "$\"$INSTDIR\logo.ico$\""
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "Publisher" "$\"${COMPANYNAME}$\""
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "HelpLink" "$\"${HELPURL}$\""
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "URLUpdateInfo" "$\"${UPDATEURL}$\""
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "URLInfoAbout" "$\"${ABOUTURL}$\""
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "DisplayVersion" "$\"${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}$\""
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "VersionMajor" ${VERSIONMAJOR}
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "VersionMinor" ${VERSIONMINOR}
+    # There is no option for modifying or repairing the install
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "NoModify" 1
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "NoRepair" 1
+    # Set the INSTALLSIZE constant (!defined at the top of this script) so Add/Remove Programs can accurately report the size
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "EstimatedSize" ${INSTALLSIZE}
 sectionEnd
  
 #------------------------------------------------------------------------------
 # Uninstaller
 
 function un.onInit
-	SetShellVarContext all
+    SetShellVarContext all
  
-	#Verify the uninstaller - last chance to back out
-	MessageBox MB_OKCANCEL "Soll ${APPNAME} wirklich entfernt werden?" IDOK next
-		Abort
-	next:
-	!insertmacro VerifyUserIsAdmin
+    #Verify the uninstaller - last chance to back out
+    MessageBox MB_OKCANCEL "Soll ${APPNAME} wirklich entfernt werden?" IDOK next
+        Abort
+    next:
+    !insertmacro VerifyUserIsAdmin
 functionEnd
  
 section "uninstall"
-	# Remove Start Menu launcher
-	delete "$SMPROGRAMS\${COMPANYNAME}\${APPNAME}.lnk"
-	delete "$SMPROGRAMS\${COMPANYNAME}\Fernwartung.lnk"
-	# Try to remove the Start Menu folder - this will only happen if it is empty
-	rmDir "$SMPROGRAMS\${COMPANYNAME}"
+    # Remove Start Menu launcher
+    delete "$SMPROGRAMS\${COMPANYNAME}\${APPNAME}.lnk"
+    delete "$SMPROGRAMS\${COMPANYNAME}\Fernwartung.lnk"
+    # Try to remove the Start Menu folder - this will only happen if it is empty
+    rmDir "$SMPROGRAMS\${COMPANYNAME}"
  
-	# Remove files
-	rmdir /r "$INSTDIR\iconengines"
-	rmdir /r "$INSTDIR\imageformats"
-	rmdir /r "$INSTDIR\platforms"
-	rmdir /r "$INSTDIR\styles"
-	rmdir /r "$INSTDIR\translations"
- 	delete "$INSTDIR\D3Dcompiler_47.dll"
- 	delete "$INSTDIR\fernwartung.exe"
- 	delete "$INSTDIR\libEGL.dll"
- 	delete "$INSTDIR\libGLESV2.dll"
- 	delete "$INSTDIR\opengl32sw.dll"
+    # Remove files
+    rmdir /r "$INSTDIR\iconengines"
+    rmdir /r "$INSTDIR\imageformats"
+    rmdir /r "$INSTDIR\platforms"
+    rmdir /r "$INSTDIR\sqldrivers"
+    rmdir /r "$INSTDIR\styles"
+    rmdir /r "$INSTDIR\translations"
+    delete "$INSTDIR\d3dcompiler_47.dll"
+    delete "$INSTDIR\fernwartung.exe"
+    delete "$INSTDIR\libEGL.dll"
+    delete "$INSTDIR\libGLESv2.dll"
+    delete "$INSTDIR\opengl32sw.dll"
     delete "$INSTDIR\${APPNAME}.exe"
- 	delete "$INSTDIR\Qt5Core.dll"
- 	delete "$INSTDIR\Qt5Gui.dll"
- 	delete "$INSTDIR\Qt5Svg.dll"
- 	delete "$INSTDIR\Qt5Widgets.dll"
- 	delete "$INSTDIR\vc_redist.x64.exe"
- 	delete "$INSTDIR\logo.ico"
+    delete "$INSTDIR\Qt5Core.dll"
+    delete "$INSTDIR\Qt5Gui.dll"
+    delete "$INSTDIR\Qt5Sql.dll"
+    delete "$INSTDIR\Qt5Svg.dll"
+    delete "$INSTDIR\Qt5Widgets.dll"
+    delete "$INSTDIR\vc_redist.x64.exe"
+    delete "$INSTDIR\logo.ico"
  
-	# Always delete uninstaller as the last action
-	delete $INSTDIR\uninstall.exe
+    # Always delete uninstaller as the last action
+    delete $INSTDIR\uninstall.exe
  
-	# Try to remove the install directory - this will only happen if it is empty
-	rmDir /r $INSTDIR
+    # Try to remove the install directory - this will only happen if it is empty
+    rmDir /r $INSTDIR
  
-	# Remove uninstaller information from the registry
-	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}"
+    # Remove uninstaller information from the registry
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}"
 sectionEnd
