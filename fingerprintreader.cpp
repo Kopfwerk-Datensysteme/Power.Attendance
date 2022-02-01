@@ -1,71 +1,11 @@
 #include "fingerprintreader.h"
-#include "winbio_types.h"
-#include "winbio_err.h"
+#include "winbio.h"
 
 #pragma comment(lib, "winbio.lib")
 #pragma comment(lib, "advapi32.lib")
 
-typedef HRESULT(__stdcall *PF_WinBioOpenSession) (
-    __in WINBIO_BIOMETRIC_TYPE Factor,
-    __in WINBIO_POOL_TYPE PoolType,
-    __in WINBIO_SESSION_FLAGS Flags,
-    __in_ecount_opt(UnitCount) WINBIO_UNIT_ID *UnitArray,
-    __in_opt SIZE_T UnitCount,
-    __in_opt GUID *DatabaseId,
-    __out WINBIO_SESSION_HANDLE *SessionHandle);
-typedef HRESULT(__stdcall *PF_WinBioCloseSession) (__in WINBIO_SESSION_HANDLE SessionHandle);
-typedef HRESULT(__stdcall *PF_WinBioLocateSensor) (
-    __in WINBIO_SESSION_HANDLE SessionHandle,
-    __out WINBIO_UNIT_ID *UnitId);
-typedef HRESULT(__stdcall *PF_WinBioIdentify) (
-    __in WINBIO_SESSION_HANDLE SessionHandle,
-    __out WINBIO_UNIT_ID *UnitId,
-    __out WINBIO_IDENTITY *Identity,
-    __out WINBIO_BIOMETRIC_SUBTYPE *SubFactor,
-    __out WINBIO_REJECT_DETAIL *RejectDetail);
-typedef HRESULT(__stdcall *PF_WinBioEnrollBegin) (
-    __in WINBIO_SESSION_HANDLE SessionHandle,
-    __in WINBIO_BIOMETRIC_SUBTYPE SubFactor,
-    __in WINBIO_UNIT_ID UnitId);
-typedef  HRESULT(__stdcall *PF_WinBioEnumBiometricUnits) (
-    __in WINBIO_BIOMETRIC_TYPE Factor,
-    __deref_out_ecount(*UnitCount) WINBIO_UNIT_SCHEMA **UnitSchemaArray,
-    __out SIZE_T *UnitCount);
-typedef HRESULT(__stdcall *PF_WinBioEnrollCapture) (
-    __in WINBIO_SESSION_HANDLE SessionHandle,
-    __out WINBIO_REJECT_DETAIL *RejectDetail);
-typedef HRESULT(__stdcall *PF_WinBioEnrollCommit) (
-    __in WINBIO_SESSION_HANDLE SessionHandle,
-    __out WINBIO_IDENTITY *Identity,
-    __out BOOLEAN *IsNewTemplate);
-typedef HRESULT(__stdcall *PF_WinBioEnumEnrollments) (
-    __in WINBIO_SESSION_HANDLE SessionHandle,
-    __in WINBIO_UNIT_ID UnitId,
-    __in WINBIO_IDENTITY *Identity,
-    __deref_out_ecount(*SubFactorCount) WINBIO_BIOMETRIC_SUBTYPE **SubFactorArray,
-    __out SIZE_T *SubFactorCount);
-typedef HRESULT(__stdcall *PF_WinBioDeleteTemplate) (
-    __in WINBIO_SESSION_HANDLE SessionHandle,
-    __in WINBIO_UNIT_ID UnitId,
-    __in WINBIO_IDENTITY *Identity,
-    __in WINBIO_BIOMETRIC_SUBTYPE SubFactor);
-typedef HRESULT(__stdcall *PF_WinBioFree) (__in PVOID Address);
-
 static const USHORT FPMAXUSER   = 25;
 static const USHORT FPMAXFINGER = 8;
-
-static const HINSTANCE winBioLib                                    = LoadLibraryA("winbio.dll");
-static const PF_WinBioOpenSession WinBioOpenSession                 = (PF_WinBioOpenSession) GetProcAddress(winBioLib, "WinBioOpenSession");
-static const PF_WinBioCloseSession WinBioCloseSession               = (PF_WinBioCloseSession) GetProcAddress(winBioLib, "WinBioCloseSession");
-static const PF_WinBioLocateSensor WinBioLocateSensor               = (PF_WinBioLocateSensor) GetProcAddress(winBioLib, "WinBioLocateSensor");
-static const PF_WinBioIdentify WinBioIdentify                       = (PF_WinBioIdentify) GetProcAddress(winBioLib, "WinBioIdentify");
-static const PF_WinBioEnrollBegin WinBioEnrollBegin                 = (PF_WinBioEnrollBegin) GetProcAddress(winBioLib, "WinBioEnrollBegin");
-static const PF_WinBioEnumBiometricUnits WinBioEnumBiometricUnits	= (PF_WinBioEnumBiometricUnits) GetProcAddress(winBioLib, "WinBioEnumBiometricUnits");
-static const PF_WinBioEnrollCapture WinBioEnrollCapture             = (PF_WinBioEnrollCapture) GetProcAddress(winBioLib, "WinBioEnrollCapture");
-static const PF_WinBioEnrollCommit WinBioEnrollCommit               = (PF_WinBioEnrollCommit) GetProcAddress(winBioLib, "WinBioEnrollCommit");
-static const PF_WinBioEnumEnrollments WinBioEnumEnrollments         = (PF_WinBioEnumEnrollments) GetProcAddress(winBioLib, "WinBioEnumEnrollments");
-static const PF_WinBioDeleteTemplate WinBioDeleteTemplate           = (PF_WinBioDeleteTemplate) GetProcAddress(winBioLib, "WinBioDeleteTemplate");
-static const PF_WinBioFree WinBioFree                               = (PF_WinBioFree) GetProcAddress(winBioLib, "WinBioFree");
 
 struct SFPSensor {
         ULONG _ulUnitId;

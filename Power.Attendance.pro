@@ -23,15 +23,15 @@ HEADERS += \
                 database.h \
 		fingerprintreader.h \
 		mainwindow.h \
-    timestampdialog.h \
-    userdialog.h \
-    usermodifydialog.h
+                timestampdialog.h \
+                userdialog.h \
+                usermodifydialog.h \
 
 FORMS += \
 		mainwindow.ui \
 		timestampdialog.ui \
 		userdialog.ui \
-		usermodifydialog.ui
+                usermodifydialog.ui \
 
 LIBS += \
 
