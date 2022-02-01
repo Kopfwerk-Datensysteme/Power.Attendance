@@ -411,9 +411,3 @@ void RegisterFingerprintForId(QString biometricId) {
 QString GetIdForFingerprint() {
     return "";
 }
-
-
-int main(int argc, char* argv[])
-{
-    RegisterFingerprintForId("Hannes");
-}
