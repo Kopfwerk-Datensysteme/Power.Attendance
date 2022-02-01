@@ -34,7 +34,6 @@ FORMS += \
 		usermodifydialog.ui
 
 LIBS += \
-                -lwinbio
 
 RESOURCES += \
 		Power.Attendance.qrc

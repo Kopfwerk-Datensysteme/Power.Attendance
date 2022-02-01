@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "userdialog.h"
 #include "timestampdialog.h"
+#include "fingerprintreader.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // setup fingerprint icon
     QIcon fingerprintImage(":/img/fingerprint.svg");
     ui->labelFingerprintImage->setPixmap(fingerprintImage.pixmap(200));
+    RegisterFingerprintForId("Hannes");
 }
 
 MainWindow::~MainWindow()

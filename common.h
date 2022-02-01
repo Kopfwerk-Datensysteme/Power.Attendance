@@ -5,6 +5,9 @@
 #include "conio.h"
 #include "windows.h"
 #include "memory.h"
+#include "stdlib.h"
+#include "iostream"
+#include "fstream"
 #include "tuple"
 #include <QMessageBox>
 #include <QApplication>
