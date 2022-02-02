@@ -4,6 +4,37 @@
 #pragma comment(lib, "winbio.lib")
 #pragma comment(lib, "advapi32.lib")
 
+class WinBioSession {
+   public:
+    WINBIO_SESSION_HANDLE handle;
+    WinBioSession() {
+        if (WinBioOpenSession(WINBIO_TYPE_FINGERPRINT, WINBIO_POOL_SYSTEM, WINBIO_FLAG_DEFAULT, nullptr, 0, WINBIO_DB_DEFAULT, &handle) != S_OK) {
+            throw QException();
+        }
+    }
+    ~WinBioSession() {
+        WinBioCloseSession(handle);
+    }
+};
+
+WINBIO_IDENTITY IdentifyUser(WINBIO_SESSION_HANDLE handle) {
+    HRESULT hr;
+    WINBIO_UNIT_ID unitId;
+    WINBIO_IDENTITY identity;
+    WINBIO_BIOMETRIC_SUBTYPE subFactor;
+    WINBIO_REJECT_DETAIL rejectDetail;
+    while (true) {
+        hr = WinBioIdentify(handle, &unitId, &identity, &subFactor, &rejectDetail);
+        if (hr == S_OK) {
+            return identity;
+        } else if (hr == WINBIO_E_ENROLLMENT_IN_PROGRESS || hr == WINBIO_E_UNKNOWN_ID) {
+            throw QException();
+        } else {
+
+        }
+    }
+}
+
 static const USHORT FPMAXUSER   = 25;
 static const USHORT FPMAXFINGER = 8;
 
@@ -322,7 +353,7 @@ void RegisterFingerprintForId(QString biometricId) {
 
     ULONG ulScannerId = 999;	// invalid -> wird beim ersten Aufruf von FPEnroll ausgewählt
     BOOL bIsOK = FALSE;
-    for (USHORT unFinger = 0; unFinger < 3; unFinger++) {
+    for (USHORT unFinger = 0; unFinger < 1; unFinger++) {
         if (WBFEnroll(unUserId, unFinger, ulScannerId))
             bIsOK = TRUE;	// ein Finger soll zumindest gelesen worden sein.
         else
@@ -349,5 +380,9 @@ void RegisterFingerprintForId(QString biometricId) {
 }
 
 QString GetIdForFingerprint() {
+    WinBioSession session;
+    IdentifyUser(session.handle);
     return "";
 }
+
+

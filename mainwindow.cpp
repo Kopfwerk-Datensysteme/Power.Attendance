@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // setup fingerprint icon
     QIcon fingerprintImage(":/img/fingerprint.svg");
     ui->labelFingerprintImage->setPixmap(fingerprintImage.pixmap(200));
-    RegisterFingerprintForId("Hannes");
 }
 
 MainWindow::~MainWindow()
@@ -24,6 +23,9 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::OnModify() {
+    auto msgBox = GetNonModalMessageBox("Hallo");
+    RegisterFingerprintForId("Hannes");
+    msgBox->close();
     UserDialog dlg;
     dlg.exec();
 }

@@ -5,6 +5,7 @@
 #include "conio.h"
 #include "windows.h"
 #include "memory.h"
+#include "memory"
 #include "stdlib.h"
 #include "iostream"
 #include "fstream"
@@ -28,3 +29,5 @@
 #include <QPicture>
 
 void ShowMessage(QString message);
+
+std::shared_ptr<QMessageBox> GetNonModalMessageBox(QString message);
