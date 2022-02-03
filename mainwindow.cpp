@@ -23,9 +23,6 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::OnModify() {
-    auto msgBox = GetNonModalMessageBox("Hallo");
-    RegisterFingerprintForId("Hannes");
-    msgBox->close();
     UserDialog dlg;
     dlg.exec();
 }

@@ -2,6 +2,8 @@
 
 #include "common.h"
 
-void RegisterFingerprintForId(QString biometricId);
+void DeleteBiometricIdFromWindows(QString biometricId);
 
-QString GetIdForFingerprint();
+QString GetBiometricIdForFingerprint();
+
+QString RegisterFingerprintForBiometricId();

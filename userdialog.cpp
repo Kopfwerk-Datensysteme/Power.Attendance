@@ -1,6 +1,7 @@
 #include "userdialog.h"
 #include "ui_userdialog.h"
 #include "usermodifydialog.h"
+#include "fingerprintreader.h"
 #include "database.h"
 
 UserDialog::UserDialog(QWidget *parent) :
@@ -55,6 +56,7 @@ void UserDialog::OnDeleteUser() {
     qint64 selectedRow = ui->userTable->selectionModel()->selectedRows()[0].row();
     QString biometricId = userData.item(selectedRow)->text();
     try {
+        DeleteBiometricIdFromWindows(biometricId);
         DeleteUser(biometricId);
     } catch (QException e) {
         ShowMessage("Der Benutzer konnte nicht gelöscht werden!");
