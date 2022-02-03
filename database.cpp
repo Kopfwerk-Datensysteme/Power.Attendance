@@ -17,18 +17,12 @@ void SetupSchemaIfNecessary() {
 }
 
 bool DoesUserExist(QString biometricId) {
-    QSqlQuery query;
-    bool success;
-    success = query.prepare("SELECT * FROM Users WHERE biometricId = ?;");
-    EventuallyHandleDatabaseError(success, query);
-    query.addBindValue(biometricId);
-    success = query.exec();
-    EventuallyHandleDatabaseError(success, query);
-    qint64 returnedRows = 0;
-    while (query.next()) {
-        returnedRows++;
+    try {
+        User user = GetUser(biometricId);
+    } catch (QException e) {
+        return false;
     }
-    return returnedRows == 1;
+    return true;
 }
 
 void CreateUser(User user) {
@@ -63,6 +57,26 @@ void DeleteUser(QString biometricId) {
     query.addBindValue(biometricId);
     success = query.exec();
     EventuallyHandleDatabaseError(success, query);
+}
+
+User GetUser(QString biometricId) {
+    QSqlQuery query;
+    User user;
+    bool success;
+    success = query.prepare("SELECT * FROM Users WHERE biometricId = ?;");
+    EventuallyHandleDatabaseError(success, query);
+    query.addBindValue(biometricId);
+    success = query.exec();
+    EventuallyHandleDatabaseError(success, query);
+    qint64 returnedRows = 0;
+    while (query.next()) {
+        returnedRows++;
+        user = {query.value(0).toString(), query.value(1).toString(), query.value(2).toString()};
+    }
+    if (returnedRows != 1) {
+        throw QException();
+    }
+    return user;
 }
 
 QList<User> GetUsers(QString userName, QString matriculationNumber) {

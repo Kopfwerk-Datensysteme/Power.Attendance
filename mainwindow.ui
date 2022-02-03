@@ -43,18 +43,20 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="labelFingerprintPrompt">
-        <property name="maximumSize">
+       <widget class="QPushButton" name="pushButtonAddTimestamp">
+        <property name="minimumSize">
          <size>
-          <width>16777215</width>
-          <height>100</height>
+          <width>0</width>
+          <height>50</height>
          </size>
         </property>
-        <property name="text">
-         <string>Bitte legen Sie den Finger auf den Fingerabdrucksensor!</string>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="text">
+         <string>Zeitstempel hinzufügen</string>
         </property>
        </widget>
       </item>

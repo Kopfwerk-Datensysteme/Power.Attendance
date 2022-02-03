@@ -27,6 +27,8 @@ void ModifyUser(User user);
 
 void DeleteUser(QString biometricId);
 
+User GetUser(QString biometricId);
+
 QList<User> GetUsers(QString userName = "", QString matriculationNumber = "");
 
 void AddTimestampForUser(QString biometricId);

@@ -28,6 +28,7 @@
 #include <QSet>
 #include <QStandardPaths>
 #include <QPicture>
+#include <QThread>
 
 void ShowMessage(QString message);
 

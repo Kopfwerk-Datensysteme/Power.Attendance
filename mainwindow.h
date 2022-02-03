@@ -24,4 +24,7 @@ private slots:
 
     // attendance menu
     void OnCheck();
+
+    // add timestamp
+    void OnAddTimestamp();
 };

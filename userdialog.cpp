@@ -75,7 +75,7 @@ void UserDialog::OnAddUser() {
     try {
         biometricId = RegisterBiometricIdForFingerprint();
     } catch (QException e) {
-        ShowMessage("Der Benutzer konnte nicht angelegt werden!");
+        ShowMessage("Der Fingerabdruck konnte nicht in der Datenbank angelegt werden!");
         return;
     }
     UserModifyDialog dlg({biometricId, "", ""}, true);
