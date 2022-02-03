@@ -6,4 +6,4 @@ void DeleteBiometricIdFromWindows(QString biometricId);
 
 QString GetBiometricIdForFingerprint();
 
-QString RegisterFingerprintForBiometricId();
+QString RegisterBiometricIdForFingerprint();

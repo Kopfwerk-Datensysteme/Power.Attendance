@@ -19,5 +19,6 @@ private:
     QStandardItemModel userData;
     void UpdateUserTable();
     void OnDeleteUser();
+    void OnAddUser();
     void OnModifyUser();
 };

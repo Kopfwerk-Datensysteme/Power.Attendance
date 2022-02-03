@@ -74,6 +74,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="userAddButton">
+         <property name="text">
+          <string>Benutzer anlegen</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="userDeleteButton">
          <property name="text">
           <string>Benutzer löschen</string>

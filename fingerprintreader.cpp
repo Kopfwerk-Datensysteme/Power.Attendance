@@ -36,6 +36,7 @@ QString GetFreeBiometricId() {
         freeBiometricIds.remove(user.biometricId);
     }
     if (freeBiometricIds.empty()) {
+        ShowMessage("Die interne Datenbank zur Speicherung der Fingerabdrücke ist voll!");
         throw QException();
     }
     return *freeBiometricIds.begin();
@@ -163,7 +164,7 @@ QString GetBiometricIdForFingerprint() {
     }
 }
 
-QString RegisterFingerprintForBiometricId() {
+QString RegisterBiometricIdForFingerprint() {
     auto sensorList = EnumerateFingerprintSensors();
     if (sensorList.size() == 0) {
         HandleMissingFingerprintSensor();
@@ -186,7 +187,7 @@ QString RegisterFingerprintForBiometricId() {
     hr = WinBioEnrollBegin(session.handle, biometricId.toInt(), sensorId);
     if (hr != S_OK) {
         if (hr == WINBIO_E_DATABASE_FULL) {
-            ShowMessage("Die Datenbank zur Speicherung der Fingerabdrücke ist voll!");
+            ShowMessage("Die Windows-Datenbank zur Speicherung der Fingerabdrücke ist voll!");
         }
         throw QException();
     }
@@ -207,6 +208,9 @@ QString RegisterFingerprintForBiometricId() {
     BOOLEAN isNewTemplate;
     hr = WinBioEnrollCommit(session.handle, &identity, &isNewTemplate);
     if (hr != S_OK) {
+        if (hr == WINBIO_E_DUPLICATE_TEMPLATE) {
+            ShowMessage("Dieser Fingerabruck ist bereits in der Datenbank vorhanden!");
+        }
         throw QException();
     }
     return biometricId;

@@ -12,6 +12,7 @@ UserDialog::UserDialog(QWidget *parent) :
     // connect slots
     connect(ui->userModifyButton, &QPushButton::pressed, this, &UserDialog::OnModifyUser);
     connect(ui->userDeleteButton, &QPushButton::pressed, this, &UserDialog::OnDeleteUser);
+    connect(ui->userAddButton, &QPushButton::pressed, this, &UserDialog::OnAddUser);
     connect(ui->lineEditUserName, &QLineEdit::textChanged, this, &UserDialog::UpdateUserTable);
     connect(ui->lineEditMatriculationNumber, &QLineEdit::textChanged, this, &UserDialog::UpdateUserTable);
     // set up user table
@@ -55,11 +56,35 @@ void UserDialog::UpdateUserTable() {
 void UserDialog::OnDeleteUser() {
     qint64 selectedRow = ui->userTable->selectionModel()->selectedRows()[0].row();
     QString biometricId = userData.item(selectedRow)->text();
+    QString userName = userData.item(selectedRow, 2)->text();
+    QMessageBox::StandardButton questionAnswer = QMessageBox::question(this, "Benutyer löschen", "Wollen Sie den Benutzer \"" + userName + "\" wirklich löschen?", QMessageBox::Yes | QMessageBox::No);
+    if (questionAnswer == QMessageBox::No) {
+        return;
+    }
     try {
         DeleteBiometricIdFromWindows(biometricId);
         DeleteUser(biometricId);
     } catch (QException e) {
         ShowMessage("Der Benutzer konnte nicht gelöscht werden!");
+    }
+    UpdateUserTable();
+}
+
+void UserDialog::OnAddUser() {
+    QString biometricId;
+    try {
+        biometricId = RegisterBiometricIdForFingerprint();
+    } catch (QException e) {
+        ShowMessage("Der Benutzer konnte nicht angelegt werden!");
+        return;
+    }
+    UserModifyDialog dlg({biometricId, "", ""});
+    if (dlg.exec() == QDialog::Accepted) {
+        try {
+            CreateUser(dlg.user);
+        } catch (QException e) {
+            ShowMessage("Der Benutzer konnte nicht angelegt werden!");
+        }
     }
     UpdateUserTable();
 }
