@@ -12,6 +12,7 @@ std::shared_ptr<QMessageBox> GetNonModalMessageBox(QString message) {
     msgBox->setWindowModality(Qt::NonModal);
     msgBox->setStandardButtons(QMessageBox::NoButton);
     msgBox->show();
+    msgBox->raise();
     QCoreApplication::processEvents();
     return msgBox;
 }
