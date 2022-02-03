@@ -12,7 +12,7 @@ class UserModifyDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit UserModifyDialog(User user, QWidget *parent = nullptr);
+    explicit UserModifyDialog(User user, bool disableCancel = false, QWidget *parent = nullptr);
     ~UserModifyDialog();
     User user;
 

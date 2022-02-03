@@ -78,7 +78,7 @@ void UserDialog::OnAddUser() {
         ShowMessage("Der Benutzer konnte nicht angelegt werden!");
         return;
     }
-    UserModifyDialog dlg({biometricId, "", ""});
+    UserModifyDialog dlg({biometricId, "", ""}, true);
     if (dlg.exec() == QDialog::Accepted) {
         try {
             CreateUser(dlg.user);
