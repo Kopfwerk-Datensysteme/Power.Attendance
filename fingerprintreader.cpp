@@ -149,7 +149,7 @@ QString GetBiometricIdForFingerprint() {
     WINBIO_IDENTITY identity;
     WINBIO_BIOMETRIC_SUBTYPE subFactor;
     WINBIO_REJECT_DETAIL rejectDetail;
-    auto msgBox = GetNonModalMessageBox("Bitte legen Sie ihren Finger wiederholt auf den Fingerabdrucksensor bis diese Meldung verschwindet!");
+    auto msgBox = GetNonModalMessageBox("Bitte legen Sie Ihren Finger wiederholt auf den Fingerabdrucksensor bis diese Meldung verschwindet!");
     while (true) {
         hr = WinBioIdentify(session.handle, &unitId, &identity, &subFactor, &rejectDetail);
         if (hr == S_OK) {
