@@ -12,7 +12,7 @@ struct Attendance {
     QString biometricId;
     QString matriculationNumber;
     QString userName;
-    QList<qint64> timestampValues;
+    QList<QDateTime> timestampValues;
 };
 
 void EventuallyHandleDatabaseError(bool success, QSqlQuery query);

@@ -30,6 +30,8 @@
 #include <QPicture>
 #include <QThread>
 
+const QString TIME_FORMAT = "HH:mm";
+
 void ShowMessage(QString message);
 
 std::shared_ptr<QMessageBox> GetNonModalMessageBox(QString message);

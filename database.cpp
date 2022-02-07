@@ -123,9 +123,9 @@ QList<Attendance> GetAttendance(QDate date, QString userName, QString matriculat
     EventuallyHandleDatabaseError(success, query);
     QList<Attendance> attendanceList;
     while (query.next()) {
-        QList<qint64> timestampList;
+        QList<QDateTime> timestampList;
         for (QString& timestampString : query.value(5).toString().split(",")) {
-            timestampList.append(timestampString.toLongLong());
+            timestampList.append(QDateTime::fromSecsSinceEpoch(timestampString.toLongLong()));
         }
         Attendance currentAttendance = {query.value(0).toString(), query.value(3).toString(), query.value(4).toString(), timestampList};
         attendanceList.append(currentAttendance);
