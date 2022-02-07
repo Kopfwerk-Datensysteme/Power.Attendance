@@ -2,6 +2,9 @@
 
 #include "common.h"
 
+const QString SETTING_ADMIN_PASSWORD = "ADMIN_PASSWORD";
+const QString DEFAULT_ADMIN_PASSWORD = "1234";
+
 struct User {
     QString biometricId;
     QString matriculationNumber;
@@ -18,6 +21,8 @@ struct Attendance {
 void EventuallyHandleDatabaseError(bool success, QSqlQuery query);
 
 void SetupSchemaIfNecessary();
+
+void UpdateSetting(QString key, QString value);
 
 bool DoesUserExist(QString biometricId);
 

@@ -14,6 +14,21 @@ void SetupSchemaIfNecessary() {
     EventuallyHandleDatabaseError(success, query);
     success = query.exec("CREATE TABLE IF NOT EXISTS Timestamps (biometricId text NOT NULL, timestampValue integer NOT NULL, FOREIGN KEY (biometricId) REFERENCES Users(biometricId));");
     EventuallyHandleDatabaseError(success, query);
+    success = query.exec("CREATE TABLE IF NOT EXISTS Settings (key text NOT NULL, value text NOT NULL, PRIMARY KEY (key));");
+    EventuallyHandleDatabaseError(success, query);
+    success = query.exec("INSERT OR IGNORE INTO Settings (key, value) VALUES ('" + SETTING_ADMIN_PASSWORD + "', '" + DEFAULT_ADMIN_PASSWORD + "');");
+    EventuallyHandleDatabaseError(success, query);
+}
+
+void UpdateSetting(QString key, QString value) {
+    QSqlQuery query;
+    bool success;
+    success = query.prepare("UPDATE Settings SET value = ? WHERE key = ?;");
+    EventuallyHandleDatabaseError(success, query);
+    query.addBindValue(value);
+    query.addBindValue(key);
+    success = query.exec();
+    EventuallyHandleDatabaseError(success, query);
 }
 
 bool DoesUserExist(QString biometricId) {
