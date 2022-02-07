@@ -162,6 +162,7 @@ QList<Attendance> GetAttendance(QDate date, QString userName, QString matriculat
         for (QString& timestampString : query.value(5).toString().split(",")) {
             timestampList.append(QDateTime::fromSecsSinceEpoch(timestampString.toLongLong()));
         }
+        std::sort(timestampList.begin(), timestampList.end());
         Attendance currentAttendance = {query.value(0).toString(), query.value(3).toString(), query.value(4).toString(), timestampList};
         attendanceList.append(currentAttendance);
     }

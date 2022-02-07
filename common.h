@@ -10,6 +10,7 @@
 #include "iostream"
 #include "fstream"
 #include "tuple"
+#include "algorithm"
 #include "functional"
 #include <QMessageBox>
 #include <QApplication>
