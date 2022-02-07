@@ -39,3 +39,7 @@ void ShowMessage(QString message);
 std::shared_ptr<QMessageBox> GetNonModalMessageBox(QString message);
 
 bool CheckAdminPassword();
+
+QString GetCSVField(QString text);
+
+QString ConvertModelToCSV(QStandardItemModel& data);

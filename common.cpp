@@ -41,3 +41,31 @@ bool CheckAdminPassword() {
     }
     return false;
 }
+
+QString GetCSVField(QString text) {
+    QString csvField = "\"" + text.replace("\"", "\"\"") + "\"";
+    return csvField;
+}
+
+QString ConvertModelToCSV(QStandardItemModel& data) {
+    QString csvText;
+    QList<QList<QString>> csvLines;
+    QList<QString> csvHeader;
+    int columnCount = data.columnCount();
+    int rowCount = data.rowCount();
+    for (int column = 0; column < columnCount; column++) {
+        csvHeader.append(GetCSVField(data.horizontalHeaderItem(column)->text()));
+    }
+    csvLines.append(csvHeader);
+    for (int row = 0; row < rowCount; row++) {
+        QList<QString> csvRow;
+        for (int column = 0; column < columnCount; column++) {
+            csvRow.append(GetCSVField(data.item(row, column)->text()));
+        }
+        csvLines.append(csvRow);
+    }
+    for (QList<QString>& csvLine : csvLines) {
+        csvText += csvLine.join(",") + "\n";
+    }
+    return csvText.trimmed();
+}
