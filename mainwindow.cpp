@@ -27,6 +27,9 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::OnModify() {
+    if (!CheckAdminPassword()) {
+        return;
+    }
     UserDialog dlg;
     dlg.exec();
 }

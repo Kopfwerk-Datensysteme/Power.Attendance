@@ -29,9 +29,12 @@
 #include <QStandardPaths>
 #include <QPicture>
 #include <QThread>
+#include <QInputDialog>
 
 const QString TIME_FORMAT = "HH:mm";
 
 void ShowMessage(QString message);
 
 std::shared_ptr<QMessageBox> GetNonModalMessageBox(QString message);
+
+bool CheckAdminPassword();

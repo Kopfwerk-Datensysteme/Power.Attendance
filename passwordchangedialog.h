@@ -1,7 +1,6 @@
-#ifndef PASSWORDCHANGEDIALOG_H
-#define PASSWORDCHANGEDIALOG_H
+#pragma once
 
-#include <QDialog>
+#include "common.h"
 
 namespace Ui {
 class PasswordChangeDialog;
@@ -20,5 +19,3 @@ private:
     Ui::PasswordChangeDialog *ui;
     void done(int r);
 };
-
-#endif // PASSWORDCHANGEDIALOG_H
