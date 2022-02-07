@@ -13,10 +13,10 @@ Unicode true
 
 !define APPNAME     "Power.Attendance"
 !define COMPANYNAME "KOPFWERK"
-!define DESCRIPTION "Verwaltung zur Ausgabe von Winkel- und Wäschestücken"
+!define DESCRIPTION "System zur Anwesenheitskontrolle"
 # These three must be integers
 !define VERSIONMAJOR 1
-!define VERSIONMINOR 1
+!define VERSIONMINOR 0
 !define VERSIONBUILD 0
 # These will be displayed by the "Click here for support information" link in "Add/Remove Programs"
 # It is possible to use "mailto:" links in here to open the email client
@@ -30,7 +30,7 @@ VIAddVersionKey /LANG=0 "ProductName" 		"${APPNAME}"
 VIAddVersionKey /LANG=0 "CompanyName" 		"${COMPANYNAME} Datensysteme GmbH."
 VIAddVersionKey /LANG=0 "Comments" 		    "${DESCRIPTION}"
 VIAddVersionKey /LANG=0 "LegalTrademarks" 	"${APPNAME} ist eine Marke von ${COMPANYNAME} Datensysteme GmbH."
-VIAddVersionKey /LANG=0 "LegalCopyright" 	"©2019-20 ${COMPANYNAME} Datensysteme GmbH."
+VIAddVersionKey /LANG=0 "LegalCopyright" 	"© ${COMPANYNAME} Datensysteme GmbH."
 VIAddVersionKey /LANG=0 "FileDescription" 	"${APPNAME} - ${DESCRIPTION}"
 VIAddVersionKey /LANG=0 "FileVersion" 		"${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}"
 VIAddVersionKey /LANG=0 "ProductVersion" 	"${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}"
@@ -143,6 +143,9 @@ section "install"
     WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "NoRepair" 1
     # Set the INSTALLSIZE constant (!defined at the top of this script) so Add/Remove Programs can accurately report the size
     WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "EstimatedSize" ${INSTALLSIZE}
+
+    # create desktop shortcut
+    CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\${APPNAME}.exe" "" "$INSTDIR\logo.ico"
 sectionEnd
  
 #------------------------------------------------------------------------------

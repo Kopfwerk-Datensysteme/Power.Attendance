@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Power.Attendance - System für Anwesenheitskontrolle</string>
+   <string>Power.Attendance - System zur Anwesenheitskontrolle</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
