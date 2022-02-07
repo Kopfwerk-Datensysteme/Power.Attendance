@@ -35,7 +35,7 @@
 #include <QTextStream>
 #include <QFile>
 
-const QString TIME_FORMAT = "HH:mm";
+static const QString TIME_FORMAT = "HH:mm";
 
 void ShowMessage(QString message);
 

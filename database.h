@@ -2,8 +2,8 @@
 
 #include "common.h"
 
-const QString SETTING_ADMIN_PASSWORD = "ADMIN_PASSWORD";
-const QString DEFAULT_ADMIN_PASSWORD = "1234";
+static const QString SETTING_ADMIN_PASSWORD = "ADMIN_PASSWORD";
+static const QString DEFAULT_ADMIN_PASSWORD = "1234";
 
 struct User {
     QString biometricId;
