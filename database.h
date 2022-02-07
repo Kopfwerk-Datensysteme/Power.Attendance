@@ -24,6 +24,8 @@ void SetupSchemaIfNecessary();
 
 void UpdateSetting(QString key, QString value);
 
+QString GetSetting(QString key);
+
 bool DoesUserExist(QString biometricId);
 
 void CreateUser(User user);

@@ -31,6 +31,26 @@ void UpdateSetting(QString key, QString value) {
     EventuallyHandleDatabaseError(success, query);
 }
 
+QString GetSetting(QString key) {
+    QSqlQuery query;
+    QString value;
+    bool success;
+    success = query.prepare("SELECT * FROM Settings WHERE key = ?;");
+    EventuallyHandleDatabaseError(success, query);
+    query.addBindValue(key);
+    success = query.exec();
+    EventuallyHandleDatabaseError(success, query);
+    qint64 returnedRows = 0;
+    while (query.next()) {
+        returnedRows++;
+        value = query.value(1).toString();
+    }
+    if (returnedRows != 1) {
+        throw QException();
+    }
+    return value;
+}
+
 bool DoesUserExist(QString biometricId) {
     try {
         User user = GetUser(biometricId);

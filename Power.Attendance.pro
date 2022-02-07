@@ -14,6 +14,7 @@ SOURCES += \
 		fingerprintreader.cpp \
 		main.cpp \
 		mainwindow.cpp \
+		passwordchangedialog.cpp \
 		timestampdialog.cpp \
 		userdialog.cpp \
 		usermodifydialog.cpp
@@ -23,12 +24,14 @@ HEADERS += \
                 database.h \
 		fingerprintreader.h \
 		mainwindow.h \
+    passwordchangedialog.h \
                 timestampdialog.h \
                 userdialog.h \
                 usermodifydialog.h \
 
 FORMS += \
 		mainwindow.ui \
+    passwordchangedialog.ui \
 		timestampdialog.ui \
 		userdialog.ui \
                 usermodifydialog.ui \

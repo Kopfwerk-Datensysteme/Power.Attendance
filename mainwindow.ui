@@ -70,7 +70,7 @@
      <x>0</x>
      <y>0</y>
      <width>994</width>
-     <height>17</height>
+     <height>19</height>
     </rect>
    </property>
    <property name="autoFillBackground">
@@ -91,8 +91,15 @@
     </property>
     <addaction name="actionCheck"/>
    </widget>
+   <widget class="QMenu" name="menuAdmin">
+    <property name="title">
+     <string>Admin</string>
+    </property>
+    <addaction name="actionPassword"/>
+   </widget>
    <addaction name="menuUser"/>
    <addaction name="menuAttendance"/>
+   <addaction name="menuAdmin"/>
   </widget>
   <action name="actionModify">
    <property name="text">
@@ -102,6 +109,11 @@
   <action name="actionCheck">
    <property name="text">
     <string>Kontrollieren ...</string>
+   </property>
+  </action>
+  <action name="actionPassword">
+   <property name="text">
+    <string>Passwort ...</string>
    </property>
   </action>
  </widget>

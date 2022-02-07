@@ -25,6 +25,9 @@ private slots:
     // attendance menu
     void OnCheck();
 
+    // admin menu
+    void OnChangeAdminPassword();
+
     // add timestamp
     void OnAddTimestamp();
 };

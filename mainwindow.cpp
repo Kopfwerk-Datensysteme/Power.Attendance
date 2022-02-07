@@ -3,6 +3,7 @@
 #include "userdialog.h"
 #include "timestampdialog.h"
 #include "fingerprintreader.h"
+#include "passwordchangedialog.h"
 #include "database.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // connect slots
     connect(ui->actionModify, &QAction::triggered, this, &MainWindow::OnModify);
     connect(ui->actionCheck, &QAction::triggered, this, &MainWindow::OnCheck);
+    connect(ui->actionPassword, &QAction::triggered, this, &MainWindow::OnChangeAdminPassword);
     connect(ui->pushButtonAddTimestamp, &QPushButton::pressed, this, &MainWindow::OnAddTimestamp);
     // setup fingerprint icon
     QIcon fingerprintImage(":/img/fingerprint.svg");
@@ -32,6 +34,17 @@ void MainWindow::OnModify() {
 void MainWindow::OnCheck() {
     TimestampDialog dlg;
     dlg.exec();
+}
+
+void MainWindow::OnChangeAdminPassword() {
+    PasswordChangeDialog dlg;
+    if (dlg.exec() == QDialog::Accepted) {
+        try {
+            UpdateSetting(SETTING_ADMIN_PASSWORD, dlg.newPassword);
+        } catch (QException e) {
+            ShowMessage("Der neue Admin-Passwort konnte nicht in der Datenbank gespeichert werden!");
+        }
+    }
 }
 
 void MainWindow::OnAddTimestamp() {

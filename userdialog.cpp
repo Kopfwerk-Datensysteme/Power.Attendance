@@ -57,7 +57,7 @@ void UserDialog::OnDeleteUser() {
     qint64 selectedRow = ui->userTable->selectionModel()->selectedRows()[0].row();
     QString biometricId = userData.item(selectedRow)->text();
     QString userName = userData.item(selectedRow, 2)->text();
-    QMessageBox::StandardButton questionAnswer = QMessageBox::question(this, "Benutyer löschen", "Wollen Sie den Benutzer \"" + userName + "\" wirklich löschen?", QMessageBox::Yes | QMessageBox::No);
+    QMessageBox::StandardButton questionAnswer = QMessageBox::question(this, "Benutzer löschen", "Wollen Sie den Benutzer \"" + userName + "\" wirklich löschen?", QMessageBox::Yes | QMessageBox::No);
     if (questionAnswer == QMessageBox::No) {
         return;
     }
