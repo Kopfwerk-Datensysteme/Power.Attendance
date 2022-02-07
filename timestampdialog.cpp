@@ -11,6 +11,7 @@ TimestampDialog::TimestampDialog(QWidget *parent) :
     connect(ui->dateEdit, &QDateEdit::dateChanged, this, &TimestampDialog::UpdateAttendanceTable);
     connect(ui->lineEditUserName, &QLineEdit::textChanged, this, &TimestampDialog::UpdateAttendanceTable);
     connect(ui->lineEditMatriculationNumber, &QLineEdit::textChanged, this, &TimestampDialog::UpdateAttendanceTable);
+    connect(ui->pushButtonExport, &QPushButton::pressed, this, &TimestampDialog::ExportTable);
     // set default date
     ui->dateEdit->setDate(QDate::currentDate());
     // set up user table
@@ -25,6 +26,11 @@ TimestampDialog::TimestampDialog(QWidget *parent) :
 TimestampDialog::~TimestampDialog()
 {
     delete ui;
+}
+
+void TimestampDialog::ExportTable() {
+    QString content = ConvertModelToCSV(attendanceData);
+    SaveContentToFile(content, "anwesenheit_tabelle.csv");
 }
 
 void TimestampDialog::UpdateAttendanceTable() {

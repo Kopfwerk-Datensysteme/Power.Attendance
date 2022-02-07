@@ -17,6 +17,7 @@ public:
 private:
     Ui::UserDialog *ui;
     QStandardItemModel userData;
+    void ExportTable();
     void UpdateUserTable();
     void OnDeleteUser();
     void OnAddUser();

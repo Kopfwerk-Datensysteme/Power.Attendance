@@ -17,5 +17,6 @@ public:
 private:
     Ui::TimestampDialog *ui;
     QStandardItemModel attendanceData;
+    void ExportTable();
     void UpdateAttendanceTable();
 };

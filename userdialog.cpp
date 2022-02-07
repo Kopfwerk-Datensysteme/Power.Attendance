@@ -15,6 +15,7 @@ UserDialog::UserDialog(QWidget *parent) :
     connect(ui->userAddButton, &QPushButton::pressed, this, &UserDialog::OnAddUser);
     connect(ui->lineEditUserName, &QLineEdit::textChanged, this, &UserDialog::UpdateUserTable);
     connect(ui->lineEditMatriculationNumber, &QLineEdit::textChanged, this, &UserDialog::UpdateUserTable);
+    connect(ui->pushButtonExport, &QPushButton::pressed, this, &UserDialog::ExportTable);
     // set up user table
     ui->userTable->setModel(&userData);
     ui->userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
@@ -27,6 +28,11 @@ UserDialog::UserDialog(QWidget *parent) :
 UserDialog::~UserDialog()
 {
     delete ui;
+}
+
+void UserDialog::ExportTable() {
+    QString content = ConvertModelToCSV(userData);
+    SaveContentToFile(content, "benutzer_tabelle.csv");
 }
 
 void UserDialog::UpdateUserTable() {
