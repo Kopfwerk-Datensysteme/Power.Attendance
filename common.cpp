@@ -22,6 +22,7 @@ bool CheckAdminPassword() {
     QInputDialog dlg;
     dlg.setWindowTitle("Admin-Passwort");
     dlg.setLabelText("Admin-Passwort eingeben:");
+    dlg.setTextEchoMode(QLineEdit::Password);
     if (dlg.exec() == QDialog::Accepted) {
         QString currentPassword;
         try {

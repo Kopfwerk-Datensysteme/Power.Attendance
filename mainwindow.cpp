@@ -40,13 +40,18 @@ void MainWindow::OnCheck() {
 }
 
 void MainWindow::OnChangeAdminPassword() {
+    if (!CheckAdminPassword()) {
+        return;
+    }
     PasswordChangeDialog dlg;
     if (dlg.exec() == QDialog::Accepted) {
         try {
             UpdateSetting(SETTING_ADMIN_PASSWORD, dlg.newPassword);
         } catch (QException e) {
             ShowMessage("Der neue Admin-Passwort konnte nicht in der Datenbank gespeichert werden!");
+            return;
         }
+        ShowMessage("Das neue Admin-Passwort wurde erfolgreich in der Datenbank gespeichert!");
     }
 }
 
