@@ -31,6 +31,9 @@
 #include <QPicture>
 #include <QThread>
 #include <QInputDialog>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QFile>
 
 const QString TIME_FORMAT = "HH:mm";
 
@@ -43,3 +46,5 @@ bool CheckAdminPassword();
 QString GetCSVField(QString text);
 
 QString ConvertModelToCSV(QStandardItemModel& data);
+
+void SaveContentToFile(QString content, QString fileName, QString caption = "Datei speichern ...", QString directory = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));

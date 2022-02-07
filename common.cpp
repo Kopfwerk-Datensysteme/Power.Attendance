@@ -69,3 +69,25 @@ QString ConvertModelToCSV(QStandardItemModel& data) {
     }
     return csvText.trimmed();
 }
+
+void SaveContentToFile(QString content, QString fileName, QString caption, QString directory) {
+    QString samplePath = directory + QDir::separator() + fileName;
+    QString filter;
+    QString suffix = QFileInfo(fileName).completeSuffix();
+    if (suffix != "") {
+        filter = "Files (*." + suffix + ")";
+    }
+    QString fileNameString = QFileDialog::getSaveFileName(nullptr, caption, samplePath, filter);
+    if (fileNameString != "")
+    {
+        QFile file(QFileInfo(fileNameString).absoluteFilePath());
+        if (!file.open(QIODevice::WriteOnly))
+        {
+            ShowMessage("Die Datei konnte nicht beschrieben werden!");
+            return;
+        }
+        QTextStream out(&file);
+        out << content;
+        file.close();
+    }
+}
