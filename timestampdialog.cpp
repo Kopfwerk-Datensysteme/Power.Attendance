@@ -8,12 +8,14 @@ TimestampDialog::TimestampDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     // connect slots
-    connect(ui->dateEdit, &QDateEdit::dateChanged, this, &TimestampDialog::UpdateAttendanceTable);
+    connect(ui->fromDateEdit, &QDateEdit::dateChanged, this, &TimestampDialog::UpdateAttendanceTable);
+    connect(ui->toDateEdit, &QDateEdit::dateChanged, this, &TimestampDialog::UpdateAttendanceTable);
     connect(ui->lineEditUserName, &QLineEdit::textChanged, this, &TimestampDialog::UpdateAttendanceTable);
     connect(ui->lineEditMatriculationNumber, &QLineEdit::textChanged, this, &TimestampDialog::UpdateAttendanceTable);
     connect(ui->pushButtonExport, &QPushButton::pressed, this, &TimestampDialog::ExportTable);
     // set default date
-    ui->dateEdit->setDate(QDate::currentDate());
+    ui->fromDateEdit->setDate(QDate::currentDate());
+    ui->toDateEdit->setDate(QDate::currentDate());
     // set up user table
     ui->attendanceTable->setModel(&attendanceData);
     ui->attendanceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
@@ -37,7 +39,8 @@ void TimestampDialog::UpdateAttendanceTable() {
     QList<Attendance> attendanceList;
     try {
         attendanceList = GetAttendance(
-                ui->dateEdit->date(),
+                ui->fromDateEdit->date(),
+                ui->toDateEdit->date(),
                 ui->lineEditUserName->text(),
                 ui->lineEditMatriculationNumber->text());
     } catch (QException e) {

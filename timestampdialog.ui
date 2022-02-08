@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_4">
+    <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
@@ -23,7 +23,7 @@
          <item>
           <widget class="QLabel" name="labelDate">
            <property name="text">
-            <string>Datum</string>
+            <string>Von-Datum</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -31,7 +31,37 @@
           </widget>
          </item>
          <item>
-          <widget class="QDateEdit" name="dateEdit">
+          <widget class="QDateEdit" name="fromDateEdit">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="displayFormat">
+            <string>dd.MM.yyyy</string>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="labelDate_2">
+           <property name="text">
+            <string>Bis-Datum</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDateEdit" name="toDateEdit">
            <property name="minimumSize">
             <size>
              <width>120</width>

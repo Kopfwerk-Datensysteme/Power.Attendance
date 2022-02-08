@@ -40,4 +40,4 @@ QList<User> GetUsers(QString userName = "", QString matriculationNumber = "");
 
 void AddTimestampForUser(QString biometricId);
 
-QList<Attendance> GetAttendance(QDate date, QString userName = "", QString matriculationNumber = "");
+QList<Attendance> GetAttendance(QDate fromDate, QDate toDate, QString userName = "", QString matriculationNumber = "");

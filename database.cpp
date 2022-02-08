@@ -143,9 +143,9 @@ void AddTimestampForUser(QString biometricId) {
     EventuallyHandleDatabaseError(success, query);
 }
 
-QList<Attendance> GetAttendance(QDate date, QString userName, QString matriculationNumber) {
-    qint64 startOfDayTimestampValue = date.startOfDay().toSecsSinceEpoch();
-    qint64 endOfDayTimestampValue = date.endOfDay().toSecsSinceEpoch();
+QList<Attendance> GetAttendance(QDate fromDate, QDate toDate, QString userName, QString matriculationNumber) {
+    qint64 startOfDayTimestampValue = fromDate.startOfDay().toSecsSinceEpoch();
+    qint64 endOfDayTimestampValue = toDate.endOfDay().toSecsSinceEpoch();
     QSqlQuery query;
     bool success;
     success = query.prepare("SELECT *, GROUP_CONCAT(timestampValue) FROM Timestamps INNER JOIN Users ON Timestamps.biometricId = Users.biometricId WHERE ? <= timestampValue AND timestampValue <= ? AND userName LIKE ('%' || ? || '%') AND matriculationNumber LIKE ('%' || ? || '%') GROUP BY Users.biometricId;");
