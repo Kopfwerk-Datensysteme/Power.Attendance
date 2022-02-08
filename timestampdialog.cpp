@@ -47,27 +47,38 @@ void TimestampDialog::UpdateAttendanceTable() {
         ShowMessage("Die Zeitstempel konnten nicht von der Datenbank geladen werden!");
     }
     attendanceData.clear();
-    attendanceData.setHorizontalHeaderItem(0, new QStandardItem(QString("Matrikelnummer")));
-    attendanceData.setHorizontalHeaderItem(1, new QStandardItem(QString("Name")));
-    attendanceData.setHorizontalHeaderItem(2, new QStandardItem(QString("Anwesenheit")));
-    for (int row = 0; row < attendanceList.size(); row++) {
-        QList<QStandardItem*> itemList;
-        itemList.append(new QStandardItem(attendanceList[row].matriculationNumber));
-        itemList.append(new QStandardItem(attendanceList[row].userName));
-        QStringList attendanceStringList;
-        QList<QDateTime> timestampValues = attendanceList[row].timestampValues;
-        int index;
-        for (index = 0; index < timestampValues.size() - 1; index += 2) {
-            QTime arriveTime = timestampValues[index].time();
-            QTime leaveTime = timestampValues[index + 1].time();
-            qint64 attendanceMinutes = arriveTime.secsTo(leaveTime) / 60;
-            attendanceStringList.append(arriveTime.toString(TIME_FORMAT) + "-" + leaveTime.toString(TIME_FORMAT) + " (" + QString::number(attendanceMinutes) + "min)");
+    attendanceData.setHorizontalHeaderItem(0, new QStandardItem(QString("Datum")));
+    attendanceData.setHorizontalHeaderItem(1, new QStandardItem(QString("Matrikelnummer")));
+    attendanceData.setHorizontalHeaderItem(2, new QStandardItem(QString("Name")));
+    attendanceData.setHorizontalHeaderItem(3, new QStandardItem(QString("Anwesenheit")));
+    for (Attendance& attendance : attendanceList) {
+        std::map<QDate, QList<QTime>> timesPerDate;
+        for (QDateTime& dateTime : attendance.timestampValues) {
+            QDate date = dateTime.date();
+            if (!timesPerDate.contains(date)) {
+                timesPerDate[date] = {};
+            }
+            timesPerDate[date].append(dateTime.time());
         }
-        if (index < timestampValues.size()) {
-            attendanceStringList.append(timestampValues[index].time().toString(TIME_FORMAT));
+        for (auto& [date, times] : timesPerDate) {
+            QList<QStandardItem*> itemList;
+            itemList.append(new QStandardItem(date.toString(DATE_FORMAT)));
+            itemList.append(new QStandardItem(attendance.matriculationNumber));
+            itemList.append(new QStandardItem(attendance.userName));
+            QStringList attendanceStringList;
+            int index;
+            for (index = 0; index < times.size() - 1; index += 2) {
+                QTime arriveTime = times[index];
+                QTime leaveTime = times[index + 1];
+                qint64 attendanceMinutes = arriveTime.secsTo(leaveTime) / 60;
+                attendanceStringList.append(arriveTime.toString(TIME_FORMAT) + "-" + leaveTime.toString(TIME_FORMAT) + " (" + QString::number(attendanceMinutes) + "min)");
+            }
+            if (index < times.size()) {
+                attendanceStringList.append(times[index].toString(TIME_FORMAT));
+            }
+            itemList.append(new QStandardItem(attendanceStringList.join(", ")));
+            attendanceData.appendRow(itemList);
         }
-        itemList.append(new QStandardItem(attendanceStringList.join(", ")));
-        attendanceData.appendRow(itemList);
     }
     ui->attendanceTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 }

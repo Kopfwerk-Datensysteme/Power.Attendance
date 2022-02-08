@@ -12,6 +12,7 @@
 #include "tuple"
 #include "algorithm"
 #include "functional"
+#include "map"
 #include <QMessageBox>
 #include <QApplication>
 #include <QSqlDatabase>
@@ -36,6 +37,7 @@
 #include <QFile>
 
 static const QString TIME_FORMAT = "HH:mm";
+static const QString DATE_FORMAT = "dd.MM.yyyy";
 
 void ShowMessage(QString message);
 
