@@ -13,6 +13,7 @@
 #include "algorithm"
 #include "functional"
 #include "map"
+#include "limits"
 #include <QMessageBox>
 #include <QApplication>
 #include <QSqlDatabase>

@@ -144,8 +144,18 @@ void AddTimestampForUser(QString biometricId) {
 }
 
 QList<Attendance> GetAttendance(QDate fromDate, QDate toDate, QString userName, QString matriculationNumber) {
-    qint64 startOfDayTimestampValue = fromDate.startOfDay().toSecsSinceEpoch();
-    qint64 endOfDayTimestampValue = toDate.endOfDay().toSecsSinceEpoch();
+    qint64 startOfDayTimestampValue;
+    if (fromDate.isValid()) {
+        startOfDayTimestampValue = fromDate.startOfDay().toSecsSinceEpoch();
+    } else {
+        startOfDayTimestampValue = 0;
+    }
+    qint64 endOfDayTimestampValue;
+    if (toDate.isValid()) {
+        endOfDayTimestampValue = toDate.endOfDay().toSecsSinceEpoch();
+    } else {
+        endOfDayTimestampValue = std::numeric_limits<qint64>::max();
+    }
     QSqlQuery query;
     bool success;
     success = query.prepare("SELECT *, GROUP_CONCAT(timestampValue) FROM Timestamps INNER JOIN Users ON Timestamps.biometricId = Users.biometricId WHERE ? <= timestampValue AND timestampValue <= ? AND userName LIKE ('%' || ? || '%') AND matriculationNumber LIKE ('%' || ? || '%') GROUP BY Users.biometricId;");
