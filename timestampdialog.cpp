@@ -10,12 +10,17 @@ TimestampDialog::TimestampDialog(QWidget *parent) :
     // connect slots
     connect(ui->fromDateEdit, &QDateEdit::dateChanged, this, &TimestampDialog::UpdateAttendanceTable);
     connect(ui->toDateEdit, &QDateEdit::dateChanged, this, &TimestampDialog::UpdateAttendanceTable);
+    connect(ui->fromDateCheckBox, &QCheckBox::stateChanged, this, &TimestampDialog::UpdateAttendanceTable);
+    connect(ui->toDateCheckBox, &QCheckBox::stateChanged, this, &TimestampDialog::UpdateAttendanceTable);
     connect(ui->lineEditUserName, &QLineEdit::textChanged, this, &TimestampDialog::UpdateAttendanceTable);
     connect(ui->lineEditMatriculationNumber, &QLineEdit::textChanged, this, &TimestampDialog::UpdateAttendanceTable);
     connect(ui->pushButtonExport, &QPushButton::pressed, this, &TimestampDialog::ExportTable);
     // set default date
     ui->fromDateEdit->setDate(QDate::currentDate());
     ui->toDateEdit->setDate(QDate::currentDate());
+    // set checkboxes to enable
+    ui->fromDateCheckBox->setCheckState(Qt::CheckState::Checked);
+    ui->toDateCheckBox->setCheckState(Qt::CheckState::Checked);
     // set up user table
     ui->attendanceTable->setModel(&attendanceData);
     ui->attendanceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
@@ -36,11 +41,17 @@ void TimestampDialog::ExportTable() {
 }
 
 void TimestampDialog::UpdateAttendanceTable() {
+    // enable or disable date fields
+    ui->fromDateEdit->setDisabled(!ui->fromDateCheckBox->isChecked());
+    ui->toDateEdit->setDisabled(!ui->toDateCheckBox->isChecked());
+    // retrieve attendance list
     QList<Attendance> attendanceList;
     try {
+        QDate fromDate = ui->fromDateEdit->date();
+        QDate toDate = ui->toDateEdit->date();
         attendanceList = GetAttendance(
-                ui->fromDateEdit->date(),
-                ui->toDateEdit->date(),
+                fromDate,
+                toDate,
                 ui->lineEditUserName->text(),
                 ui->lineEditMatriculationNumber->text());
     } catch (QException e) {
