@@ -202,6 +202,9 @@ QString RegisterBiometricIdForFingerprint() {
         msgBox->close();
         if (hr == S_OK) {
             break;
+        } else if (hr == WINBIO_E_LOCK_VIOLATION || hr == E_ACCESSDENIED) {
+            ShowMessage("Es kann nicht auf den Fingerabdrucksensor zugegriffen werden!");
+            throw QException();
         }
     }
     WINBIO_IDENTITY identity;
