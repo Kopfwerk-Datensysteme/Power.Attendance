@@ -18,5 +18,8 @@ public:
 
 private:
     Ui::UserModifyDialog *ui;
+    bool newUser;
+    QString initialMatriculationNumber;
+    void done(int r);
     void UpdateUser();
 };

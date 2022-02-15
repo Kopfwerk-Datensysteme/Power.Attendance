@@ -32,7 +32,7 @@ bool DoesUserWithMatriculationNumberExist(QString matriculationNumber);
 
 void CreateUser(User user);
 
-void ModifyUser(User user);
+void ModifyUser(User user, QString matriculationNumber);
 
 void DeleteUserWithBiometricId(QString biometricId);
 

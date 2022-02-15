@@ -106,7 +106,7 @@ void UserDialog::OnModifyUser() {
     UserModifyDialog dlg({matriculationNumber, biometricId, userName});
     if (dlg.exec() == QDialog::Accepted) {
         try {
-            ModifyUser(dlg.user);
+            ModifyUser(dlg.user, matriculationNumber);
         } catch (QException e) {
             ShowMessage("Der Benutzer konnte nicht geändert werden!");
         }

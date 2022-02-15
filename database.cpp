@@ -10,9 +10,11 @@ void EventuallyHandleDatabaseError(bool success, QSqlQuery query) {
 void SetupSchemaIfNecessary() {
     QSqlQuery query;
     bool success;
+    success = query.exec("PRAGMA foreign_keys = ON;");
+    EventuallyHandleDatabaseError(success, query);
     success = query.exec("CREATE TABLE IF NOT EXISTS Users (matriculationNumber text NOT NULL, biometricId text NOT NULL UNIQUE, userName text NOT NULL, PRIMARY KEY (matriculationNumber));");
     EventuallyHandleDatabaseError(success, query);
-    success = query.exec("CREATE TABLE IF NOT EXISTS Timestamps (matriculationNumber text NOT NULL, timestampValue integer NOT NULL, FOREIGN KEY (matriculationNumber) REFERENCES Users(matriculationNumber));");
+    success = query.exec("CREATE TABLE IF NOT EXISTS Timestamps (matriculationNumber text NOT NULL, timestampValue integer NOT NULL, FOREIGN KEY (matriculationNumber) REFERENCES Users(matriculationNumber) ON DELETE CASCADE ON UPDATE CASCADE);");
     EventuallyHandleDatabaseError(success, query);
     success = query.exec("CREATE TABLE IF NOT EXISTS Settings (key text NOT NULL, value text NOT NULL, PRIMARY KEY (key));");
     EventuallyHandleDatabaseError(success, query);
@@ -81,14 +83,15 @@ void CreateUser(User user) {
     EventuallyHandleDatabaseError(success, query);
 }
 
-void ModifyUser(User user) {
+void ModifyUser(User user, QString matriculationNumber) {
     QSqlQuery query;
     bool success;
-    success = query.prepare("UPDATE Users SET biometricId = ?, userName = ? WHERE matriculationNumber = ?;");
+    success = query.prepare("UPDATE Users SET matriculationNumber = ?, biometricId = ?, userName = ? WHERE matriculationNumber = ?;");
     EventuallyHandleDatabaseError(success, query);
+    query.addBindValue(user.matriculationNumber);
     query.addBindValue(user.biometricId);
     query.addBindValue(user.userName);
-    query.addBindValue(user.matriculationNumber);
+    query.addBindValue(matriculationNumber);
     success = query.exec();
     EventuallyHandleDatabaseError(success, query);
 }
