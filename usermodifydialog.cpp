@@ -1,6 +1,7 @@
 #include "usermodifydialog.h"
 #include "ui_usermodifydialog.h"
 #include "database.h"
+#include "fingerprintreader.h"
 
 UserModifyDialog::UserModifyDialog(User user, bool newUser, QWidget *parent) :
     QDialog(parent),
@@ -9,6 +10,7 @@ UserModifyDialog::UserModifyDialog(User user, bool newUser, QWidget *parent) :
     ui->setupUi(this);
     // connect slots
     connect(ui->buttonBox->button(QDialogButtonBox::Ok), &QPushButton::pressed, this, &UserModifyDialog::UpdateUser);
+    connect(ui->pushButtonNewFingerprint, &QPushButton::pressed, this, &UserModifyDialog::GetNewBiometricId);
     // save initial values
     initialMatriculationNumber = user.matriculationNumber;
     // fill dialog fields
@@ -17,8 +19,10 @@ UserModifyDialog::UserModifyDialog(User user, bool newUser, QWidget *parent) :
     ui->lineEditUserName->setText(user.userName);
     this->user = user;
     this->newUser = newUser;
-    // remove help and close button in the top right corner
-    this->setWindowFlags(Qt::Dialog | Qt::Desktop);
+    // disable new fingerprint button
+    if (this->newUser) {
+        ui->pushButtonNewFingerprint->setVisible(false);
+    }
 }
 
 UserModifyDialog::~UserModifyDialog()
@@ -44,4 +48,14 @@ void UserModifyDialog::done(int r)
         }
     }
     QDialog::done(r);
+}
+
+void UserModifyDialog::GetNewBiometricId() {
+    try {
+        ui->lineEditBiometricId->setText(RegisterBiometricIdForFingerprint());
+        ui->pushButtonNewFingerprint->setEnabled(false);
+        UpdateUser();
+    } catch (QException e) {
+        ShowMessage("Der Fingerabdruck konnte nicht in der Datenbank angelegt werden!");
+    }
 }

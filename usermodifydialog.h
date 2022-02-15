@@ -22,4 +22,5 @@ private:
     QString initialMatriculationNumber;
     void done(int r);
     void UpdateUser();
+    void GetNewBiometricId();
 };

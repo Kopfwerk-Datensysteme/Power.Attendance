@@ -104,11 +104,31 @@ void UserDialog::OnModifyUser() {
     QString matriculationNumber = userData.item(selectedRow, 1)->text();
     QString userName = userData.item(selectedRow, 2)->text();
     UserModifyDialog dlg({matriculationNumber, biometricId, userName});
-    if (dlg.exec() == QDialog::Accepted) {
+    int dlgResult = dlg.exec();
+    QString newBiometricId = dlg.user.biometricId;
+    bool biometricIdChanged = biometricId != newBiometricId;
+    if (dlgResult == QDialog::Accepted) {
         try {
             ModifyUser(dlg.user, matriculationNumber);
         } catch (QException e) {
+            if (biometricIdChanged) {
+                try {
+                    DeleteBiometricIdFromWindows(newBiometricId);
+                } catch (QException e) {}
+            }
             ShowMessage("Der Benutzer konnte nicht geändert werden!");
+            return;
+        }
+        if (biometricIdChanged) {
+            try {
+                DeleteBiometricIdFromWindows(biometricId);
+            } catch (QException e) {}
+        }
+    } else {
+        if (biometricIdChanged) {
+            try {
+                DeleteBiometricIdFromWindows(newBiometricId);
+            } catch (QException e) {}
         }
     }
     UpdateUserTable();
