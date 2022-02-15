@@ -55,7 +55,7 @@ void TimestampDialog::UpdateAttendanceTable() {
         if (!ui->toDateCheckBox->isChecked()) {
             toDate = QDate();
         }
-        attendanceList = GetAttendance(
+        attendanceList = GetAttendances(
                 fromDate,
                 toDate,
                 ui->lineEditUserName->text(),

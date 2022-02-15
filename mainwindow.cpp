@@ -59,7 +59,7 @@ void MainWindow::OnAddTimestamp() {
     QString biometricId;
     try {
         biometricId = GetBiometricIdForFingerprint();
-        if (!DoesUserExist(biometricId)) {
+        if (!DoesUserWithBiometricIdExist(biometricId)) {
             throw QException();
         }
     } catch (QException e) {
@@ -67,13 +67,19 @@ void MainWindow::OnAddTimestamp() {
         return;
     }
     try {
-        AddTimestampForUser(biometricId);
+        AddTimestampForUserWithBiometricId(biometricId);
     } catch (QException e) {
         ShowMessage("Der Zeitstempel konnte nicht in der Datenbank gespeichert werden!");
         return;
     }
-    User currentUser = GetUser(biometricId);
-    auto msgBox = GetNonModalMessageBox("Ein Zeitstempel für Benutzer \"" + currentUser.userName + "\" wurde erfolgreich der Datenbank hinzugefügt!");
+    QString userName;
+    try {
+        User currentUser = GetUserWithBiometricId(biometricId);
+        userName = currentUser.userName;
+    } catch (QException e) {
+        ShowMessage("Der Benutzer konnte nicht aus der Datenbank geladen werden!");
+    }
+    auto msgBox = GetNonModalMessageBox("Ein Zeitstempel für Benutzer \"" + userName + "\" wurde erfolgreich der Datenbank hinzugefügt!");
     QThread::currentThread()->sleep(2);
     msgBox->close();
 }

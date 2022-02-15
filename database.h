@@ -6,14 +6,14 @@ static const QString SETTING_ADMIN_PASSWORD = "ADMIN_PASSWORD";
 static const QString DEFAULT_ADMIN_PASSWORD = "1234";
 
 struct User {
-    QString biometricId;
     QString matriculationNumber;
+    QString biometricId;
     QString userName;
 };
 
 struct Attendance {
-    QString biometricId;
     QString matriculationNumber;
+    QString biometricId;
     QString userName;
     QList<QDateTime> timestampValues;
 };
@@ -26,18 +26,26 @@ void UpdateSetting(QString key, QString value);
 
 QString GetSetting(QString key);
 
-bool DoesUserExist(QString biometricId);
+bool DoesUserWithBiometricIdExist(QString biometricId);
+
+bool DoesUserWithMatriculationNumberExist(QString matriculationNumber);
 
 void CreateUser(User user);
 
 void ModifyUser(User user);
 
-void DeleteUser(QString biometricId);
+void DeleteUserWithBiometricId(QString biometricId);
 
-User GetUser(QString biometricId);
+void DeleteUserWithMatriculationNumber(QString matriculationNumber);
+
+User GetUserWithBiometricId(QString biometricId);
+
+User GetUserWithMatriculationNumber(QString matriculationNumber);
 
 QList<User> GetUsers(QString userName = "", QString matriculationNumber = "");
 
-void AddTimestampForUser(QString biometricId);
+void AddTimestampForUserWithBiometricId(QString biometricId);
 
-QList<Attendance> GetAttendance(QDate fromDate, QDate toDate, QString userName = "", QString matriculationNumber = "");
+void AddTimestampForUserWithMatriculationNumber(QString matriculationNumber);
+
+QList<Attendance> GetAttendances(QDate fromDate, QDate toDate, QString userName = "", QString matriculationNumber = "");

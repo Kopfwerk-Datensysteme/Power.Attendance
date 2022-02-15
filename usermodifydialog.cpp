@@ -1,7 +1,7 @@
 #include "usermodifydialog.h"
 #include "ui_usermodifydialog.h"
 
-UserModifyDialog::UserModifyDialog(User user, bool disableCancel, QWidget *parent) :
+UserModifyDialog::UserModifyDialog(User user, bool newUser, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::UserModifyDialog)
 {
@@ -15,10 +15,6 @@ UserModifyDialog::UserModifyDialog(User user, bool disableCancel, QWidget *paren
     this->user = user;
     // remove help and close button in the top right corner
     this->setWindowFlags(Qt::Dialog | Qt::Desktop);
-    // eventually disable the cancel button
-    if (disableCancel) {
-        ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(false);
-    }
 }
 
 UserModifyDialog::~UserModifyDialog()

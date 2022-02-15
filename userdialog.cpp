@@ -68,8 +68,8 @@ void UserDialog::OnDeleteUser() {
         return;
     }
     try {
+        DeleteUserWithBiometricId(biometricId);
         DeleteBiometricIdFromWindows(biometricId);
-        DeleteUser(biometricId);
     } catch (QException e) {
         ShowMessage("Der Benutzer konnte nicht gelöscht werden!");
     }
@@ -84,13 +84,16 @@ void UserDialog::OnAddUser() {
         ShowMessage("Der Fingerabdruck konnte nicht in der Datenbank angelegt werden!");
         return;
     }
-    UserModifyDialog dlg({biometricId, "", ""}, true);
+    UserModifyDialog dlg({"", biometricId, ""}, true);
     if (dlg.exec() == QDialog::Accepted) {
         try {
             CreateUser(dlg.user);
         } catch (QException e) {
+            DeleteBiometricIdFromWindows(biometricId);
             ShowMessage("Der Benutzer konnte nicht angelegt werden!");
         }
+    } else {
+        DeleteBiometricIdFromWindows(biometricId);
     }
     UpdateUserTable();
 }
@@ -100,7 +103,7 @@ void UserDialog::OnModifyUser() {
     QString biometricId = userData.item(selectedRow, 0)->text();
     QString matriculationNumber = userData.item(selectedRow, 1)->text();
     QString userName = userData.item(selectedRow, 2)->text();
-    UserModifyDialog dlg({biometricId, matriculationNumber, userName});
+    UserModifyDialog dlg({matriculationNumber, biometricId, userName});
     if (dlg.exec() == QDialog::Accepted) {
         try {
             ModifyUser(dlg.user);

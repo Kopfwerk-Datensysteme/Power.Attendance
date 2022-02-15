@@ -10,9 +10,9 @@ void EventuallyHandleDatabaseError(bool success, QSqlQuery query) {
 void SetupSchemaIfNecessary() {
     QSqlQuery query;
     bool success;
-    success = query.exec("CREATE TABLE IF NOT EXISTS Users (biometricId text NOT NULL, matriculationNumber text NOT NULL, userName text NOT NULL, PRIMARY KEY (biometricId));");
+    success = query.exec("CREATE TABLE IF NOT EXISTS Users (matriculationNumber text NOT NULL, biometricId text NOT NULL UNIQUE, userName text NOT NULL, PRIMARY KEY (matriculationNumber));");
     EventuallyHandleDatabaseError(success, query);
-    success = query.exec("CREATE TABLE IF NOT EXISTS Timestamps (biometricId text NOT NULL, timestampValue integer NOT NULL, FOREIGN KEY (biometricId) REFERENCES Users(biometricId));");
+    success = query.exec("CREATE TABLE IF NOT EXISTS Timestamps (matriculationNumber text NOT NULL, timestampValue integer NOT NULL, FOREIGN KEY (matriculationNumber) REFERENCES Users(matriculationNumber));");
     EventuallyHandleDatabaseError(success, query);
     success = query.exec("CREATE TABLE IF NOT EXISTS Settings (key text NOT NULL, value text NOT NULL, PRIMARY KEY (key));");
     EventuallyHandleDatabaseError(success, query);
@@ -51,9 +51,18 @@ QString GetSetting(QString key) {
     return value;
 }
 
-bool DoesUserExist(QString biometricId) {
+bool DoesUserWithBiometricIdExist(QString biometricId) {
     try {
-        User user = GetUser(biometricId);
+        User user = GetUserWithBiometricId(biometricId);
+    } catch (QException e) {
+        return false;
+    }
+    return true;
+}
+
+bool DoesUserWithMatriculationNumberExist(QString matriculationNumber) {
+    try {
+        User user = GetUserWithMatriculationNumber(matriculationNumber);
     } catch (QException e) {
         return false;
     }
@@ -63,10 +72,10 @@ bool DoesUserExist(QString biometricId) {
 void CreateUser(User user) {
     QSqlQuery query;
     bool success;
-    success = query.prepare("INSERT INTO Users (biometricId, matriculationNumber, userName) VALUES (?, ?, ?);");
+    success = query.prepare("INSERT INTO Users (matriculationNumber, biometricId, userName) VALUES (?, ?, ?);");
     EventuallyHandleDatabaseError(success, query);
-    query.addBindValue(user.biometricId);
     query.addBindValue(user.matriculationNumber);
+    query.addBindValue(user.biometricId);
     query.addBindValue(user.userName);
     success = query.exec();
     EventuallyHandleDatabaseError(success, query);
@@ -75,32 +84,40 @@ void CreateUser(User user) {
 void ModifyUser(User user) {
     QSqlQuery query;
     bool success;
-    success = query.prepare("UPDATE Users SET matriculationNumber = ?, userName = ? WHERE biometricId = ?;");
+    success = query.prepare("UPDATE Users SET biometricId = ?, userName = ? WHERE matriculationNumber = ?;");
     EventuallyHandleDatabaseError(success, query);
-    query.addBindValue(user.matriculationNumber);
-    query.addBindValue(user.userName);
     query.addBindValue(user.biometricId);
+    query.addBindValue(user.userName);
+    query.addBindValue(user.matriculationNumber);
     success = query.exec();
     EventuallyHandleDatabaseError(success, query);
 }
 
-void DeleteUser(QString biometricId) {
+void DeleteUser(QString column, QString value) {
     QSqlQuery query;
     bool success;
-    success = query.prepare("DELETE FROM Users WHERE biometricId = ?;");
+    success = query.prepare("DELETE FROM Users WHERE " + column + " = ?;");
     EventuallyHandleDatabaseError(success, query);
-    query.addBindValue(biometricId);
+    query.addBindValue(value);
     success = query.exec();
     EventuallyHandleDatabaseError(success, query);
 }
 
-User GetUser(QString biometricId) {
+void DeleteUserWithBiometricId(QString biometricId) {
+    DeleteUser("biometricId", biometricId);
+}
+
+void DeleteUserWithMatriculationNumber(QString matriculationNumber) {
+    DeleteUser("matriculationNumber", matriculationNumber);
+}
+
+User GetUser(QString column, QString value) {
     QSqlQuery query;
     User user;
     bool success;
-    success = query.prepare("SELECT * FROM Users WHERE biometricId = ?;");
+    success = query.prepare("SELECT * FROM Users WHERE " + column + " = ?;");
     EventuallyHandleDatabaseError(success, query);
-    query.addBindValue(biometricId);
+    query.addBindValue(value);
     success = query.exec();
     EventuallyHandleDatabaseError(success, query);
     qint64 returnedRows = 0;
@@ -112,6 +129,14 @@ User GetUser(QString biometricId) {
         throw QException();
     }
     return user;
+}
+
+User GetUserWithBiometricId(QString biometricId) {
+    return GetUser("biometricId", biometricId);
+}
+
+User GetUserWithMatriculationNumber(QString matriculationNumber) {
+    return GetUser("matriculationNumber", matriculationNumber);
 }
 
 QList<User> GetUsers(QString userName, QString matriculationNumber) {
@@ -131,19 +156,24 @@ QList<User> GetUsers(QString userName, QString matriculationNumber) {
     return userList;
 }
 
-void AddTimestampForUser(QString biometricId) {
+void AddTimestampForUserWithBiometricId(QString biometricId) {
+    User user = GetUserWithBiometricId(biometricId);
+    AddTimestampForUserWithMatriculationNumber(user.matriculationNumber);
+}
+
+void AddTimestampForUserWithMatriculationNumber(QString matriculationNumber) {
     QSqlQuery query;
     bool success;
-    success = query.prepare("INSERT INTO Timestamps (biometricId, timestampValue) VALUES (?, ?);");
+    success = query.prepare("INSERT INTO Timestamps (matriculationNumber, timestampValue) VALUES (?, ?);");
     EventuallyHandleDatabaseError(success, query);
-    query.addBindValue(biometricId);
+    query.addBindValue(matriculationNumber);
     qint64 timestampValue = QDateTime::currentDateTime().toSecsSinceEpoch();
     query.addBindValue(timestampValue);
     success = query.exec();
     EventuallyHandleDatabaseError(success, query);
 }
 
-QList<Attendance> GetAttendance(QDate fromDate, QDate toDate, QString userName, QString matriculationNumber) {
+QList<Attendance> GetAttendances(QDate fromDate, QDate toDate, QString userName, QString matriculationNumber) {
     qint64 startOfDayTimestampValue;
     if (fromDate.isValid()) {
         startOfDayTimestampValue = fromDate.startOfDay().toSecsSinceEpoch();
@@ -158,7 +188,7 @@ QList<Attendance> GetAttendance(QDate fromDate, QDate toDate, QString userName, 
     }
     QSqlQuery query;
     bool success;
-    success = query.prepare("SELECT *, GROUP_CONCAT(timestampValue) FROM Timestamps INNER JOIN Users ON Timestamps.biometricId = Users.biometricId WHERE ? <= timestampValue AND timestampValue <= ? AND userName LIKE ('%' || ? || '%') AND matriculationNumber LIKE ('%' || ? || '%') GROUP BY Users.biometricId;");
+    success = query.prepare("SELECT *, GROUP_CONCAT(timestampValue) FROM Timestamps INNER JOIN Users ON Timestamps.matriculationNumber = Users.matriculationNumber WHERE ? <= timestampValue AND timestampValue <= ? AND userName LIKE ('%' || ? || '%') AND Users.matriculationNumber LIKE ('%' || ? || '%') GROUP BY Users.matriculationNumber;");
     EventuallyHandleDatabaseError(success, query);
     query.addBindValue(startOfDayTimestampValue);
     query.addBindValue(endOfDayTimestampValue);
