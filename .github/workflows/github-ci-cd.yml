@@ -1,22 +1,31 @@
+# name of the workflow
 name: CI-CD
 
+# specifies when the workflow should execute
 on:
+  # on pushes to master
   push:
     branches: [ master ]
+  # on pull requests to master
   pull_request:
     branches: [ master ]
+  # whenever a release is published
   release:
     types: [published]
-
+  # also allow manual start of the workflow
   workflow_dispatch:
 
+# definition of all jobs that run in parallel in this workflow unless otherwise specified
 jobs:
+  # this job builds the software
   build:
+    # the job runs on a windows 2019 vm
     runs-on: windows-2019
-  
+    # defines the sequential commands or steps that should be executed in this job
     steps:
+      # checkout the repository code
       - uses: actions/checkout@v2
-
+      # install qt
       - uses: jurplel/install-qt-action@v2
         with:
           version: '5.15.2'
@@ -24,27 +33,32 @@ jobs:
           target: 'desktop'
           host: 'windows'
           dir: 'C:\'
-        
+      # build the installer using a prepared script that also works locally
       - run: |
           cd Installer 
           .\build_installer.bat
-        
+      # upload the built installer to a fileserver where it can be downloaded by another job
       - uses: actions/upload-artifact@v2
         with:
           name: Setup
           path: Installer/Power.Attendance.Setup.exe
           if-no-files-found: error
-          
+
+  # this job deploys the software     
   deploy:
+    # it is only executed after the build job has finished
     needs: build
+     # it is only executed when the workflow was triggered by a release
     if: github.event_name == 'release'
+    # this workflow runs on a ubuntu 20 vm
     runs-on: ubuntu-20.04
-    
+    # defines the sequential commands or steps that should be executed in this job
     steps:
+      # download the built installer from the build job
       - uses: actions/download-artifact@v2
         with:
           name: Setup
-
+      # attach the built installer to the published release
       - uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
